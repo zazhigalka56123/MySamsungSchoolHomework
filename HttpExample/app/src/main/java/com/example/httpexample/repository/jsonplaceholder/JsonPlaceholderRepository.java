@@ -18,8 +18,8 @@ public class JsonPlaceholderRepository {
             Log.d("USERS", String.valueOf(url));
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
-            connection.setConnectTimeout(120000);
-            connection.setReadTimeout(120000);
+            connection.setConnectTimeout(30000);
+            connection.setReadTimeout(30000);
             connection.connect();
 
             int responseCode = connection.getResponseCode();

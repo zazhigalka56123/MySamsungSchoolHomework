@@ -23,8 +23,7 @@ public class JsonPlaceholderParser {
         Log.d("USERS", rawUserJson);
         JSONArray jsonArray = new JSONArray(rawUserJson);
         Log.d("USERS", rawUserJson);
-        Log.d("USERS", String.valueOf(jsonArray));
-        User[] UserRes = new User[10];
+        User[] UserRes = new User[jsonArray.length()];
         for(int i = 0; i < jsonArray.length();i++) {
             JSONObject userRootJson = jsonArray.getJSONObject(i);
             JSONObject addressJson = userRootJson.getJSONObject("address");

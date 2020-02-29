@@ -15,6 +15,7 @@ public class UserTask extends AsyncTask<User[], User[], User[]> {
     JsonPlaceholderParser parser;
     UserResponse userResponse;
 
+
     public UserTask(JsonPlaceholderParser parser, UserResponse userResponse) {
         this.parser = parser;
         this.userResponse = userResponse;
@@ -29,7 +30,7 @@ public class UserTask extends AsyncTask<User[], User[], User[]> {
     @Override
     protected User[] doInBackground(User[]... users) {
         try {
-            Log.d("USERS", "Пацаны ща парсить начну");
+
             User[] user = parser.getUser();
             return user;
         } catch (IOException | JSONException e) {
