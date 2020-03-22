@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import ru.dreamteam.goldse4enie.getters.GetLoginRequest;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private TextView login_et;

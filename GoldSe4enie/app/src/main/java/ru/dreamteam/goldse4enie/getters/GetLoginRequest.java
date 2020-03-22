@@ -1,4 +1,4 @@
-package ru.dreamteam.goldse4enie;
+package ru.dreamteam.goldse4enie.getters;
 
 import android.widget.EditText;
 

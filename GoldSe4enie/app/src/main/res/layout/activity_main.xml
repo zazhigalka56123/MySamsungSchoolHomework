@@ -13,9 +13,11 @@
         android:layout_height="50dp"
         android:text="Войти"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/et_password"
         app:layout_constraintVertical_bias="0.287"
-        tools:layout_editor_absoluteX="55dp"
         tools:ignore="MissingConstraints" />
 
     <EditText
@@ -26,7 +28,7 @@
         android:hint="Введите пароль"
         android:textColor="#A8FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/et_login" />
 
@@ -34,11 +36,11 @@
         android:id="@+id/et_login"
         android:layout_width="300dp"
         android:layout_height="50dp"
-        android:layout_marginTop="308dp"
+        android:layout_marginTop="280dp"
         android:hint="Введите логин"
         android:textColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintHorizontal_bias="0.504"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
