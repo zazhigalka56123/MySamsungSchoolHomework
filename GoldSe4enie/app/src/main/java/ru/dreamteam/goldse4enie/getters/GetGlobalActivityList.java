@@ -1,19 +1,19 @@
 package ru.dreamteam.goldse4enie.getters;
 
 public class GetGlobalActivityList {
-    String[] getTime(){
+    public String[] getTime(){
         String[] a = {"08:00-09:00", "09:00-10:00", "10:00-11:00", "11:00-12:00", "11:00-12:00",
                 "12:00-13:00", "13:00-15:00", "15:00-16:00", "16:00-19:00", "19:00-21:00"};
         return a;
     }
 
-    String[] getPlace(){
+    public String[] getPlace(){
         String[] b = {"РАСИЯ!!!", "РАСИЯ!!!", "РАСИЯ!!!", "РАСИЯ!!!", "РАСИЯ!!!", "РАСИЯ!!!",
                 "РАСИЯ!!!", "РАСИЯ!!!", "РАСИЯ!!!", "РАСИЯ!!!"};
         return b;
     }
 
-    String[] getActivity(){
+    public String[] getActivity(){
         String[] c = {"ФФФФФФФЛЕКС АУЕ", "ФФФФФФФЛЕКС АУЕ", "ФФФФФФФЛЕКС АУЕ", "ФФФФФФФЛЕКС АУЕ", "ФФФФФФФЛЕКС АУЕ",
                 "ФФФФФФФЛЕКС АУЕ", "ФФФФФФФЛЕКС АУЕ", "ФФФФФФФЛЕКС АУЕ", "ФФФФФФФЛЕКС АУЕ", "ФФФФФФФЛЕКС АУЕ"};
         return c;

@@ -35,7 +35,7 @@ public class NumbersAdapterLocalList extends RecyclerView.Adapter<NumbersAdapter
     @Override
     public NumberViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Context context = parent.getContext();
-        int layoutIdForListItem = R.layout.item_time_list;
+        int layoutIdForListItem = R.layout.item_activity;
 
         LayoutInflater inflater = LayoutInflater.from(context);
 
@@ -64,7 +64,7 @@ public class NumbersAdapterLocalList extends RecyclerView.Adapter<NumbersAdapter
         }
         void bind(int listIndex) {
             tv_time_start.setText(time[listIndex].split("-")[0]);
-            tv_time_start.setText(time[listIndex].split("-")[1]);
+            tv_time_end.setText(time[listIndex].split("-")[1]);
             tv_place.setText(place[listIndex]);
             tv_activity.setText(activity[listIndex]);
         }

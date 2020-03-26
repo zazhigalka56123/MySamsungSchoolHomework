@@ -20,7 +20,7 @@ public class GetLoginRequest {
         this.password = password;
     }
 
-    int getRequest(){
+    public int getRequest(){
         return 1;
     }
 

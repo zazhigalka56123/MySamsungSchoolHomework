@@ -64,7 +64,7 @@ public class NumbersAdapterTimeList extends RecyclerView.Adapter<NumbersAdapterT
         }
         void bind(int listIndex) {
             tv_time_start.setText(time[listIndex].split("-")[0]);
-            tv_time_start.setText(time[listIndex].split("-")[1]);
+            tv_time_end.setText(time[listIndex].split("-")[1]);
             tv_place.setText(place[listIndex]);
             tv_activity.setText(activity[listIndex]);
         }

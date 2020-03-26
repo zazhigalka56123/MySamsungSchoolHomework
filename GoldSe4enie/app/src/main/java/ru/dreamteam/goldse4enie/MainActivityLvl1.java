@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
@@ -18,6 +19,7 @@ public class MainActivityLvl1 extends AppCompatActivity implements View.OnClickL
     private ImageButton time_list;
     private ImageButton local_activity;
     private ImageButton global_activity;
+    private ImageButton settings;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,10 +28,12 @@ public class MainActivityLvl1 extends AppCompatActivity implements View.OnClickL
         time_list = findViewById(R.id.ib_time_list);
         local_activity = findViewById(R.id.ib_local_activity);
         global_activity = findViewById(R.id.ib_global_activity);
+        settings = findViewById(R.id.bt_settings);
 
         time_list.setOnClickListener(this);
         local_activity.setOnClickListener(this);
         global_activity.setOnClickListener(this);
+        settings.setOnClickListener(this);
 
         RecyclerView numbersList = findViewById(R.id.rv_list);
 
@@ -105,13 +109,18 @@ public class MainActivityLvl1 extends AppCompatActivity implements View.OnClickL
 
                 String[] time_activityList_ = getlocalActivityList.getTime();
                 String[] place_activityList_ = getlocalActivityList.getPlace();
-                String[] activity_activityList_ = getlocalActivityList  .getActivity();
+                String[] activity_activityList_ = getlocalActivityList.getActivity();
 
                 NumbersAdapterLocalList numbersAdapterKk = new NumbersAdapterLocalList(
                         time_activityList_.length,
                         time_activityList_, place_activityList_, activity_activityList_);
                 numbersList.setAdapter(numbersAdapterKk);
                 break;
+            case R.id.bt_settings:
+                Intent intentK = new Intent(v.getContext(), SettingsActivity.class);
+                v.getContext().startActivity(intentK);
+                break;
+
         }
     }
 }
