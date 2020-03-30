@@ -1,11 +1,13 @@
-package ru.dreamteam.goldse4enie;
-
-import androidx.appcompat.app.AppCompatActivity;
+package ru.dreamteam.goldse4enie.view;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import ru.dreamteam.goldse4enie.R;
 
 public class SettingsActivity extends AppCompatActivity implements View.OnClickListener {
     private ImageButton back;

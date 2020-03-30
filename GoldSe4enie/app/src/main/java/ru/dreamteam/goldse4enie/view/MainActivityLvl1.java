@@ -1,14 +1,16 @@
-package ru.dreamteam.goldse4enie;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+package ru.dreamteam.goldse4enie.view;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import ru.dreamteam.goldse4enie.R;
 import ru.dreamteam.goldse4enie.adapters.NumbersAdapterLocalList;
 import ru.dreamteam.goldse4enie.adapters.NumbersAdapterTimeList;
 import ru.dreamteam.goldse4enie.getters.GetGlobalActivityList;
@@ -20,6 +22,9 @@ public class MainActivityLvl1 extends AppCompatActivity implements View.OnClickL
     private ImageButton local_activity;
     private ImageButton global_activity;
     private ImageButton settings;
+    private TextView app_name;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,11 +34,15 @@ public class MainActivityLvl1 extends AppCompatActivity implements View.OnClickL
         local_activity = findViewById(R.id.ib_local_activity);
         global_activity = findViewById(R.id.ib_global_activity);
         settings = findViewById(R.id.bt_settings);
+        app_name = findViewById(R.id.textView2);
 
         time_list.setOnClickListener(this);
         local_activity.setOnClickListener(this);
         global_activity.setOnClickListener(this);
         settings.setOnClickListener(this);
+
+        Intent intent = getIntent();
+        app_name.setText(intent.getStringExtra("appname"));
 
         RecyclerView numbersList = findViewById(R.id.rv_list);
 

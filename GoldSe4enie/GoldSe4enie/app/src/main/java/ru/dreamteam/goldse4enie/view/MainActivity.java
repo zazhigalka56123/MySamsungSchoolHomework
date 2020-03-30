@@ -1,13 +1,15 @@
-package ru.dreamteam.goldse4enie;
-
-import androidx.appcompat.app.AppCompatActivity;
+package ru.dreamteam.goldse4enie.view;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import ru.dreamteam.goldse4enie.R;
 import ru.dreamteam.goldse4enie.getters.GetLoginRequest;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -16,10 +18,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextView password_et;
     private Button  entrance_bt;
 
+
     private String login;
     private String password;
 
-    private GetLoginRequest getLoginRequest;
+    public GetLoginRequest getLoginRequest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +35,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         entrance_bt.setOnClickListener(this);
 
-
     }
 
     @Override
@@ -41,11 +43,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.bt_entrance:
                 login = String.valueOf(login_et.getText());
                 password = String.valueOf(password_et.getText());
-                getLoginRequest = new GetLoginRequest(login, password);
+                getLoginRequest = new GetLoginRequest(login, password,this);
 
                 switch (getLoginRequest.getRequest()){
                     case 1:
                         Intent intent = new Intent(v.getContext(), MainActivityLvl1.class);
+                        intent.putExtra("appname",getLoginRequest.GetLogin());
                         v.getContext().startActivity(intent);
                         break;
                     case 2:
@@ -54,6 +57,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         break;
                     case 3:
                         //переход на лвл три
+                        break;
+                    case 0:
+                        Toast.makeText(this,"try again",Toast.LENGTH_SHORT).show();
                         break;
                     default:
                         break;
