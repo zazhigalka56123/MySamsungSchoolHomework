@@ -1,6 +1,7 @@
 package ru.dreamteam.goldse4enie.getters;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.util.HashMap;
 
@@ -34,6 +35,7 @@ public class GetLoginRequest {
         User user = usersInteractor.getUser(login.hashCode(), password.hashCode());
 
         if (user != null) {
+            Log.d("User", String.valueOf(user));
             return user.lvl;
         } else {
             return 0;

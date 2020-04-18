@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import ru.dreamteam.goldse4enie.R;
 import ru.dreamteam.goldse4enie.getters.GetLoginRequest;
 
-public class    MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private TextView login_et;
     private TextView password_et;
@@ -47,22 +47,20 @@ public class    MainActivity extends AppCompatActivity implements View.OnClickLi
 
                 switch (getLoginRequest.getRequest()){
                     case 1:
-                        Intent intentLvl1 = new Intent(v.getContext(), MainActivityLvl1.class);
-                        intentLvl1.putExtra("appname",getLoginRequest.GetLogin());
-                        v.getContext().startActivity(intentLvl1);
+                        Intent intentlvl1 = new Intent(v.getContext(), MainActivityLvl1.class);
+                        intentlvl1.putExtra("appname",getLoginRequest.GetLogin());
+                        v.getContext().startActivity(intentlvl1);
                         break;
                     case 2:
-                        Intent intentLvl2 = new Intent(v.getContext(), MainActivityLvl2.class);
-                        v.getContext().startActivity(intentLvl2);
-
+                        Intent intentlvl2 = new Intent(v.getContext(), MainActivityLvl2.class);
+                        intentlvl2.putExtra("appname",getLoginRequest.GetLogin());
+                        v.getContext().startActivity(intentlvl2);
                         break;
                     case 3:
                         //переход на лвл три
                         break;
                     case 0:
                         Toast.makeText(this,"try again",Toast.LENGTH_SHORT).show();
-                        break;
-                    default:
                         break;
                 }
         }

@@ -4,15 +4,15 @@ package ru.dreamteam.goldse4enie.domain;
  * Модель данных пользователя
  */
 public class User {
-    private final int id;
-    private final int name;
-    private final int password;
-    private final int lvl;
-    private final String age = "";
-    private final int campNumber = 0;
-    private final String campType = "";
+    public final int id;
+    public final int name;
+    public final int password;
+    public final int lvl;
+    public final String age = "";
+    public final int campNumber = 0;
+    public final String campType = "";
 
-    private User(int id, int name, int password,int lvl) {
+    public User(int id, int name, int password,int lvl) {
         this.id = id;
         this.name = name;
         this.password = password;

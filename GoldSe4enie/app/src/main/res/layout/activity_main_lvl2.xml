@@ -6,59 +6,189 @@
     android:layout_height="match_parent"
     tools:context=".view.MainActivityLvl2">
 
-
-    <Button
-        android:id="@+id/bt_create_global_activity"
-        android:layout_width="300dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_marginTop="64dp"
-        android:background="@drawable/shape_button"
-        android:text="Создать лагерную занятость"
-        android:textColor="@color/blue"
-        android:textSize="16dp"
+        android:background="@color/blue"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bt_create_local_activity" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <Button
-        android:id="@+id/bt_create_time_list"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="164dp"
-        android:background="@drawable/shape_button"
-        android:text="Создать расписание"
-        android:textColor="@color/blue"
-        android:textSize="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <ImageButton
+            android:id="@+id/bt_home_lvl2"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@color/nothing"
+            android:src="@drawable/ic_home"
+            app:layout_constraintBottom_toBottomOf="@+id/textView"
+            app:layout_constraintStart_toStartOf="@+id/textView"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/bt_create_local_activity"
-        android:layout_width="300dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="64dp"
-        android:background="@drawable/shape_button"
-        android:text="Создать отрядную занятость"
-        android:textColor="@color/blue"
-        android:textSize="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bt_create_time_list" />
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_weight="1"
+            android:padding="5dp"
+            android:text="Имя Фамилия"
+            android:textAlignment="center"
+            android:textColor="@color/yellow"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/textView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/textView"
+            app:layout_constraintVertical_bias="0.545" />
 
-    <Button
-        android:layout_width="300dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="64dp"
-        android:background="@drawable/shape_button"
-        android:text="Режим ученика"
-        android:textColor="@color/blue"
-        android:textSize="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bt_create_global_activity" />
+        <ImageButton
+            android:id="@+id/bt_settings"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@color/nothing"
+            android:src="@drawable/ic_industry"
+            app:layout_constraintBottom_toBottomOf="@+id/textView"
+            app:layout_constraintEnd_toEndOf="@+id/textView"
+            app:layout_constraintTop_toTopOf="parent" />
+    </LinearLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="30dp"
+        android:paddingTop="50dp"
+        android:paddingRight="30dp"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp">
+
+        <Button
+            android:id="@+id/buttonTimeList"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="204dp"
+            android:background="@drawable/shape_button"
+            android:text="создать расписание"
+            android:textColor="@color/blue"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteX="16dp" />
+
+        <Button
+            android:id="@+id/buttonLocalActivity"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="340dp"
+            android:background="@drawable/shape_button"
+            android:text="создать локальную активность"
+            android:textColor="@color/blue"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteX="30dp" />
+
+        <Button
+            android:id="@+id/buttonGlobalActivity"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginTop="480dp"
+            android:background="@drawable/shape_button"
+            android:text="создать глобальную активность"
+            android:textColor="@color/blue"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteX="30dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <!--    <LinearLayout-->
+<!--        android:id="@+id/linearLayout"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="40dp"-->
+<!--        android:background="@color/blue"-->
+<!--        android:orientation="horizontal"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.0"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintVertical_bias="1.0">-->
+
+<!--        <LinearLayout-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_marginTop="5dp"-->
+<!--            android:layout_weight="1"-->
+<!--            android:orientation="vertical">-->
+
+
+<!--            <ImageButton-->
+<!--                android:id="@+id/ib_global_activity"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_weight="1"-->
+<!--                android:background="#00FFFFFF"-->
+<!--                android:src="@drawable/ic_ball" />-->
+
+<!--            <TextView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_weight="1"-->
+<!--                android:text="Лагерь"-->
+<!--                android:textAlignment="center"-->
+<!--                android:textColor="@color/yellow"-->
+<!--                android:textSize="10sp" />-->
+<!--        </LinearLayout>-->
+
+<!--        <LinearLayout-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_marginTop="5dp"-->
+<!--            android:layout_weight="1"-->
+<!--            android:orientation="vertical">-->
+
+<!--            <ImageButton-->
+<!--                android:id="@+id/ib_time_list"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_weight="1"-->
+<!--                android:background="#00FFFFFF"-->
+<!--                android:src="@drawable/ic_medal" />-->
+
+<!--            <TextView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_weight="1"-->
+<!--                android:text="Расписание"-->
+<!--                android:textAlignment="center"-->
+<!--                android:textColor="@color/yellow"-->
+<!--                android:textSize="10sp" />-->
+<!--        </LinearLayout>-->
+
+<!--        <LinearLayout-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_marginTop="5dp"-->
+<!--            android:layout_weight="1"-->
+<!--            android:orientation="vertical">-->
+
+<!--            <ImageButton-->
+<!--                android:id="@+id/ib_local_activity"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_weight="1"-->
+<!--                android:background="#00FFFFFF"-->
+<!--                android:src="@drawable/ic_medal" />-->
+
+<!--            <TextView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_weight="1"-->
+<!--                android:text="Отряд"-->
+<!--                android:textAlignment="center"-->
+<!--                android:textColor="@color/yellow"-->
+<!--                android:textSize="10sp" />-->
+<!--        </LinearLayout>-->
+<!--    </LinearLayout>-->
+
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

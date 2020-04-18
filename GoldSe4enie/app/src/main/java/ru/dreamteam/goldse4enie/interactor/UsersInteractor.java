@@ -18,8 +18,9 @@ public class UsersInteractor {
     }
 
     public boolean update_bd(){
-        insertUser("Иван Пасечник".hashCode(),"12314".hashCode(), 1);
-        return insertUser("Дима Зайцев".hashCode(),"12314".hashCode(), 1);
+        insertUser("ИванПасечник".hashCode(),"12314".hashCode(), 2);
+        insertUser("1".hashCode(),"1".hashCode(), 2);
+        return insertUser("Дима Зайцев".hashCode(),"2".hashCode(), 1);
     }
 
     public User getUser(int name, int password) {
