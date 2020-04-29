@@ -10,9 +10,10 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/blue"
+        android:background="@color/white"
         android:paddingStart="10dp"
         android:paddingEnd="10dp"
+        android:elevation="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -23,6 +24,8 @@
             android:layout_height="match_parent"
             android:background="@color/nothing"
             android:src="@drawable/ic_home"
+            android:backgroundTint="@color/blue"
+            android:elevation="20dp"
             app:layout_constraintBottom_toBottomOf="@+id/textView"
             app:layout_constraintStart_toStartOf="@+id/textView"
             app:layout_constraintTop_toTopOf="parent" />
@@ -36,9 +39,8 @@
             android:padding="5dp"
             android:text="Имя Фамилия"
             android:textAlignment="center"
-            android:textColor="@color/yellow"
+            android:textColor="@color/blue"
             android:textSize="20dp"
-            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/textView"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/textView"
@@ -72,8 +74,8 @@
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@color/blue"
+        android:layout_height="60dp"
+        android:background="@color/white"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -103,9 +105,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Лагерь"
-                android:textAlignment="center"
-                android:textColor="@color/yellow"
-                android:textSize="10sp" />
+                android:textColor="@color/colorPrimaryDark"
+                android:textAlignment="center"/>
         </LinearLayout>
 
         <LinearLayout
@@ -128,9 +129,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Расписание"
-                android:textAlignment="center"
-                android:textColor="@color/yellow"
-                android:textSize="10sp" />
+                android:textColor="@color/colorPrimaryDark"
+                android:textAlignment="center"/>
         </LinearLayout>
 
         <LinearLayout
@@ -153,9 +153,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Отряд"
-                android:textAlignment="center"
-                android:textColor="@color/yellow"
-                android:textSize="10sp" />
+                android:textColor="@color/colorPrimaryDark"
+                android:textAlignment="center"/>
         </LinearLayout>
     </LinearLayout>
 
