@@ -1,7 +1,9 @@
 package ru.dreamteam.goldse4enie.view;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -9,8 +11,10 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
@@ -30,10 +34,12 @@ public class CreateTLActivity extends AppCompatActivity implements View.OnClickL
     private Button bt_time_start;
     private Button bt_time_end;
     private Button bt_date;
+    private Button bt_set_name;
 
     private Spinner spinner_otryad;
     private Spinner spinner_napr;
 
+    private EditText et_dialog;
     public String vizov;
 
     @Override
@@ -50,8 +56,13 @@ public class CreateTLActivity extends AppCompatActivity implements View.OnClickL
         bt_date = findViewById(R.id.bt_date);
         bt_date.setOnClickListener(this);
 
+        bt_set_name = findViewById(R.id.bt_set_name);
+        bt_set_name.setOnClickListener(this);
+
         spinner_napr = findViewById(R.id.spinner_napr);
         spinner_otryad = findViewById(R.id.spinner_otryad);
+
+        et_dialog = findViewById(R.id.et_dialog);
 
         Date currentDate = new Date();
 
@@ -102,6 +113,29 @@ public class CreateTLActivity extends AppCompatActivity implements View.OnClickL
                 datePicker.show(getSupportFragmentManager(), "date picker");
                 break;
 
+            case R.id.bt_set_name:
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(CreateTLActivity.this, R.style.Theme_AppCompat_Dialog_Alert);
+
+                final View opa = getLayoutInflater().inflate(R.layout.dialog_et, null);
+
+                builder.setView(opa);
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        EditText editText = opa.findViewById(R.id.et_dialog);
+                        bt_set_name.setText(editText.getText().toString());
+                        Toast.makeText(getApplicationContext(),editText.getText().toString(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+                break;
         }
     }
 
