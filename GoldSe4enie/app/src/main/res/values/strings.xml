@@ -2,6 +2,7 @@
     <string name="app_name">Золотое сечение</string>
 
     <string-array name="napr">
+        <item>...</item>
         <item>Наука</item>
         <item>Исскусство</item>
         <item>Спорт</item>
@@ -9,6 +10,7 @@
     </string-array>
 
     <string-array name="otr">
+        <item>0</item>
         <item>1</item>
         <item>2</item>
         <item>3</item>

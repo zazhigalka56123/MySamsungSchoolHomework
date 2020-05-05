@@ -1,5 +1,6 @@
 package ru.dreamteam.goldse4enie.view;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -13,14 +14,19 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -28,74 +34,66 @@ import java.util.Locale;
 import ru.dreamteam.goldse4enie.DatePickerFragememt;
 import ru.dreamteam.goldse4enie.R;
 import ru.dreamteam.goldse4enie.TimePickerFragment;
+import ru.dreamteam.goldse4enie.domain.TimeList;
 
-public class CreateTLActivity extends AppCompatActivity implements View.OnClickListener, TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener,AdapterView.OnItemSelectedListener {
+public class CreateTLActivity extends AppCompatActivity implements View.OnClickListener, TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener, AdapterView.OnItemSelectedListener {
 
     private Button bt_time_start;
     private Button bt_time_end;
     private Button bt_date;
     private Button bt_set_name;
+    private Button bt_set_place;
+    private Button bt_add_tl;
+    private Button bt_add_item_tl;
 
     private Spinner spinner_otryad;
     private Spinner spinner_napr;
 
-    private EditText et_dialog;
-    public String vizov;
+    private TextView tv_error_tl;
+
+    private String TimeNowMinute;
+    private String TimeNowHoure;
+    private String DateNowDay;
+    private String DateNowMonth;
+    private String vizov;
+
+    private ArrayList<String> TimeStart = new ArrayList<>();
+    private ArrayList<String> TimeEnd = new ArrayList<>();
+    private ArrayList<String> name = new ArrayList<>();
+    private ArrayList<String> place = new ArrayList<>();
+    private String TimeStartStr = "";
+    private String TimeEndStr = "";
+    private String nameStr = "";
+    private String placeStr = "";
+    private String Date = "";
+    private String DateOld = "";
+    private String CampType = "Наука";
+    private String CampTypeOld = "";
+    private int CampNumber = 1;
+    private int CampNumberOld = 0;
+
+    private int items = 0;
+
+    private FirebaseDatabase database;
+    private DatabaseReference Ref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_t_l);
 
-        bt_time_start = findViewById(R.id.bt_time_start);
-        bt_time_start.setOnClickListener(this);
-
-        bt_time_end = findViewById(R.id.bt_time_end);
-        bt_time_end.setOnClickListener(this);
-
-        bt_date = findViewById(R.id.bt_date);
-        bt_date.setOnClickListener(this);
-
-        bt_set_name = findViewById(R.id.bt_set_name);
-        bt_set_name.setOnClickListener(this);
-
-        spinner_napr = findViewById(R.id.spinner_napr);
-        spinner_otryad = findViewById(R.id.spinner_otryad);
-
-        et_dialog = findViewById(R.id.et_dialog);
-
-        Date currentDate = new Date();
-
-        DateFormat dateFormat = new SimpleDateFormat("dd.MM", Locale.getDefault());
-        String dateText = dateFormat.format(currentDate);
-
-        DateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
-        String timeText = timeFormat.format(currentDate);
-
-        bt_date.setText(dateText);
-        bt_time_start.setText(timeText);
-        bt_time_end.setText(timeText);
-
-        ArrayAdapter<CharSequence> arrayAdapterOtr = ArrayAdapter.createFromResource(this,
-                R.array.otr, android.R.layout.simple_list_item_1);
-        arrayAdapterOtr.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        ArrayAdapter<CharSequence> arrayAdapterNapr = ArrayAdapter.createFromResource(this,
-                R.array.napr, android.R.layout.simple_list_item_1);
-        arrayAdapterOtr.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        spinner_otryad.setAdapter(arrayAdapterOtr);
-        spinner_napr.setAdapter(arrayAdapterNapr);
-
-        spinner_otryad.setOnItemSelectedListener(this);
-        spinner_napr.setOnItemSelectedListener(this);
-
-
+        init();
+        updateTime();
+        // ссылка на realtime database https://console.firebase.google.com/project/gold-se4enie-lvl2-test/database/gold-se4enie-lvl2-test/data
+        bt_date.setText(DateNowDay + "." + DateNowMonth);
+        bt_time_start.setText(TimeNowHoure + ":" + TimeNowMinute);
+        bt_time_end.setText(TimeNowHoure + ":" + TimeNowMinute);
     }
 
+    @SuppressLint("ResourceAsColor")
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.bt_time_start:
                 DialogFragment timePicker = new TimePickerFragment();
                 timePicker.show(getSupportFragmentManager(), "time picker");
@@ -114,28 +112,105 @@ public class CreateTLActivity extends AppCompatActivity implements View.OnClickL
                 break;
 
             case R.id.bt_set_name:
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(CreateTLActivity.this, R.style.Theme_AppCompat_Dialog_Alert);
-
-                final View opa = getLayoutInflater().inflate(R.layout.dialog_et, null);
-
-                builder.setView(opa);
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                AlertDialog.Builder builderName = new AlertDialog.Builder(CreateTLActivity.this,
+                        R.style.Theme_AppCompat_Dialog_Alert);
+                final View viewName = getLayoutInflater().inflate(R.layout.dialog_et, null);
+                builderName.setView(viewName);
+                builderName.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        EditText editText = opa.findViewById(R.id.et_dialog);
+                        EditText editText = viewName.findViewById(R.id.et_dialog);
                         bt_set_name.setText(editText.getText().toString());
-                        Toast.makeText(getApplicationContext(),editText.getText().toString(), Toast.LENGTH_SHORT).show();
+                        nameStr = editText.getText().toString();
                     }
                 });
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                builderName.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.cancel();
                     }
                 });
-
-                AlertDialog alertDialog = builder.create();
-                alertDialog.show();
+                AlertDialog alertDialogName = builderName.create();
+                alertDialogName.show();
                 break;
+
+            case R.id.bt_set_place:
+                AlertDialog.Builder builderPlace = new AlertDialog.Builder(CreateTLActivity.this,
+                        R.style.Theme_AppCompat_Dialog_Alert);
+                final View viewPlace = getLayoutInflater().inflate(R.layout.dialog_et, null);
+                builderPlace.setView(viewPlace);
+                builderPlace.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        EditText editText = viewPlace.findViewById(R.id.et_dialog);
+                        bt_set_place.setText(editText.getText().toString());
+                        placeStr = editText.getText().toString();
+
+                    }
+                });
+                builderPlace.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+                AlertDialog alertDialogPlace = builderPlace.create();
+                alertDialogPlace.show();
+                break;
+
+            case R.id.bt_add_item_tl:
+
+                if (TimeEndStr.equals("") || TimeStartStr.equals("") || Date.equals("")) {
+
+                    tv_error_tl.setText("Заполните все поля!");
+                    tv_error_tl.setTextColor(R.color.red);
+
+                } else if (Date.equals(DateNowDay + "." + DateNowMonth) || Date.equals("")) {
+
+                    tv_error_tl.setText("Невозможно редактировать расписание на сегодня!");
+                    tv_error_tl.setTextColor(R.color.red);
+
+//                } else if (CampType.equals("") || CampType.equals("...") || CampNumber == 0) {
+//                    Log.d("Gay", CampType);
+//                    Log.d("Gay", String.valueOf(CampNumber));
+//                    tv_error_tl.setText("Укажите отряд/направление");
+//                    tv_error_tl.setTextColor(R.color.red);
+
+//                } else if (!DateOld.equals(Date) || CampNumber != CampNumberOld || !CampType.equals(CampTypeOld)) {
+//
+//                    tv_error_tl.setText("Не изменяйте дату/номер отряда/направление!");
+//                    tv_error_tl.setTextColor(R.color.red);
+
+                } else {
+
+                    TimeStart.add(TimeStartStr);
+                    TimeEnd.add(TimeEndStr);
+                    name.add(nameStr);
+                    place.add(placeStr);
+
+                    DateOld = Date;
+                    CampTypeOld = CampType;
+                    CampNumberOld = CampNumber;
+
+                    TimeStartStr = "";
+                    TimeEndStr = "";
+                    nameStr = "";
+                    placeStr = "";
+
+                    items += 1;
+
+
+
+                    Toast.makeText(CreateTLActivity.this, "Записано!", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case R.id.bt_add_tl:
+                Toast.makeText(CreateTLActivity.this, "Добавлено!", Toast.LENGTH_SHORT).show();
+                TimeList timeList = new TimeList(Date, CampNumber, CampType, TimeStart, TimeEnd, name, place);
+                Ref.push().setValue(timeList);
+                Log.d("tl", String.valueOf(timeList.date));
+                Log.d("tl", String.valueOf(timeList.campNumber));
+                Log.d("tl", String.valueOf(timeList.campType));
+                Log.d("tl", String.valueOf(timeList.timeStart));
+                Log.d("tl", String.valueOf(timeList.timeEnd));
+                Log.d("tl", String.valueOf(timeList.name));
+                Log.d("tl", String.valueOf(timeList.place));
         }
     }
 
@@ -145,22 +220,24 @@ public class CreateTLActivity extends AppCompatActivity implements View.OnClickL
         String min;
         String hour;
 
-        if(minute == 0)
+        if (minute == 0)
             min = "00";
         else if (minute < 10)
-            min = "0"+minute;
+            min = "0" + minute;
         else
             min = String.valueOf(minute);
 
-        if(hourOfDay == 0)
+        if (hourOfDay == 0)
             hour = "00";
         else
             hour = String.valueOf(hourOfDay);
-        Log.d("timeLol", String.valueOf(view));
-        if (vizov == "1")
-            bt_time_start.setText(hour+":"+min);
-        else if (vizov == "2")
-            bt_time_end.setText(hour+":"+min);
+        if (vizov == "1") {
+            bt_time_start.setText(hour + ":" + min);
+            TimeStartStr = hour + ":" + min;
+        } else if (vizov == "2") {
+            bt_time_end.setText(hour + ":" + min);
+            TimeEndStr = hour + ":" + min;
+        }
     }
 
     @Override
@@ -181,13 +258,75 @@ public class CreateTLActivity extends AppCompatActivity implements View.OnClickL
         else
             d = String.valueOf(dayOfMonth);
         bt_date.setText(d + "." + m);
-
+        Date = (d + "." + m);
     }
 
 
+    public void init() {
+        bt_time_start = findViewById(R.id.bt_time_start);
+        bt_time_start.setOnClickListener(this);
+
+        bt_time_end = findViewById(R.id.bt_time_end);
+        bt_time_end.setOnClickListener(this);
+
+        bt_date = findViewById(R.id.bt_date);
+        bt_date.setOnClickListener(this);
+
+        bt_set_name = findViewById(R.id.bt_set_name);
+        bt_set_name.setOnClickListener(this);
+
+        bt_set_place = findViewById(R.id.bt_set_place);
+        bt_set_place.setOnClickListener(this);
+
+        bt_add_tl = findViewById(R.id.bt_add_tl);
+        bt_add_tl.setOnClickListener(this);
+
+        bt_add_item_tl = findViewById(R.id.bt_add_item_tl);
+        bt_add_item_tl.setOnClickListener(this);
+
+        spinner_napr = findViewById(R.id.spinner_napr);
+        spinner_otryad = findViewById(R.id.spinner_otryad);
+
+        tv_error_tl = findViewById(R.id.tv_error_tl);
+
+        ArrayAdapter<CharSequence> arrayAdapterOtr = ArrayAdapter.createFromResource(this,
+                R.array.otr, android.R.layout.simple_list_item_1);
+        arrayAdapterOtr.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        ArrayAdapter<CharSequence> arrayAdapterNapr = ArrayAdapter.createFromResource(this,
+                R.array.napr, android.R.layout.simple_list_item_1);
+        arrayAdapterOtr.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        spinner_otryad.setAdapter(arrayAdapterOtr);
+        spinner_napr.setAdapter(arrayAdapterNapr);
+
+        spinner_otryad.setOnItemSelectedListener(this);
+        spinner_napr.setOnItemSelectedListener(this);
+
+        database = FirebaseDatabase.getInstance();
+        Ref = database.getReference("Time list");
+    }
+
+    public void updateTime() {
+        Date currentDate = new Date();
+
+        DateFormat timeFormatMinute = new SimpleDateFormat("mm", Locale.getDefault());
+        TimeNowMinute = timeFormatMinute.format(currentDate);
+
+        DateFormat timeFormatHoure = new SimpleDateFormat("HH", Locale.getDefault());
+        TimeNowHoure = timeFormatHoure.format(currentDate);
+
+        DateFormat dateFormatDay = new SimpleDateFormat("dd", Locale.getDefault());
+        DateNowDay = dateFormatDay.format(currentDate);
+
+        DateFormat dateFormatMonth = new SimpleDateFormat("MM", Locale.getDefault());
+        DateNowMonth = dateFormatMonth.format(currentDate);
+    }
+
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        
+        CampType = (spinner_napr.getSelectedItem().toString());
+//        CampNumber = (int) spinner_napr.getSelectedItem();
     }
 
     @Override
