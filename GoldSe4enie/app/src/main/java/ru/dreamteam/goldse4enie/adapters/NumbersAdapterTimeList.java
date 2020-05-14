@@ -9,25 +9,29 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
+
 import ru.dreamteam.goldse4enie.R;
 
 public class NumbersAdapterTimeList extends RecyclerView.Adapter<NumbersAdapterTimeList.NumberViewHolder> {
 
     private int numberItems;
 
-    private String[] time;
-    private String[] place;
-    private String[] activity;
+    private ArrayList<String> timeStart;
+    private ArrayList<String> timeEnd;
+    private ArrayList<String> place;
+    private ArrayList<String> activity;
 
     private TextView tv_activity;
     private TextView tv_place;
     private TextView tv_time_start;
     private TextView tv_time_end;
 
-    public NumbersAdapterTimeList(int numberOfItem, String[] timeArr, String[] placeArr,
-                                  String[] activityArr ) {
+    public NumbersAdapterTimeList(int numberOfItem, ArrayList<String> timeStartArr, ArrayList<String> timeEndArr,
+                                  ArrayList<String> placeArr, ArrayList<String> activityArr ) {
         numberItems = numberOfItem;
-        time = timeArr;
+        timeStart = timeStartArr;
+        timeEnd = timeEndArr;
         place = placeArr;
         activity = activityArr;
     }
@@ -63,10 +67,10 @@ public class NumbersAdapterTimeList extends RecyclerView.Adapter<NumbersAdapterT
             tv_time_end = itemView.findViewById(R.id.tv_time_end);
         }
         void bind(int listIndex) {
-            tv_time_start.setText(time[listIndex].split("-")[0]);
-            tv_time_end.setText(time[listIndex].split("-")[1]);
-            tv_place.setText(place[listIndex]);
-            tv_activity.setText(activity[listIndex]);
+            tv_time_start.setText(timeStart.get(listIndex));
+            tv_time_end.setText(timeEnd.get(listIndex));
+            tv_place.setText(place.get(listIndex));
+            tv_activity.setText(activity.get(listIndex));
         }
     }
 }

@@ -11,7 +11,8 @@ public class TimeList {
     public final ArrayList<String> name;
     public final ArrayList<String> place;
 
-    public TimeList(String date, int campNumber, String campType, ArrayList<String> timeStart, ArrayList<String> timeEnd, ArrayList<String> name, ArrayList<String> place) {
+    public TimeList(String date, int campNumber, String campType, ArrayList<String> timeStart,
+                    ArrayList<String> timeEnd, ArrayList<String> name, ArrayList<String> place) {
         this.date = date;
         this.campNumber = campNumber;
         this.campType = campType;

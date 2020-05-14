@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import ru.dreamteam.goldse4enie.R;
 import ru.dreamteam.goldse4enie.adapters.NumbersAdapterLocalList;
-import ru.dreamteam.goldse4enie.adapters.NumbersAdapterTimeList;
 import ru.dreamteam.goldse4enie.getters.GetGlobalActivityList;
 import ru.dreamteam.goldse4enie.getters.GetLocalActivityList;
 import ru.dreamteam.goldse4enie.getters.GetTimeList;
@@ -57,10 +56,10 @@ public class MainActivityLvl1 extends AppCompatActivity implements View.OnClickL
         String[] place_timeList = getTimeList.getPlace();
         String[] activity_timeList = getTimeList.getActivity();
 
-        NumbersAdapterTimeList numbersAdapter = new NumbersAdapterTimeList(
-                time_timeList.length,
-                time_timeList, place_timeList, activity_timeList);
-        numbersList.setAdapter(numbersAdapter);
+//        NumbersAdapterTimeList numbersAdapter = new NumbersAdapterTimeList(
+//                time_timeList.length,
+//                time_timeList, place_timeList, activity_timeList);
+//        numbersList.setAdapter(numbersAdapter);
 
     }
 
@@ -80,11 +79,11 @@ public class MainActivityLvl1 extends AppCompatActivity implements View.OnClickL
                 String[] time_timeList = getTimeList.getTime();
                 String[] place_timeList = getTimeList.getPlace();
                 String[] activity_timeList = getTimeList.getActivity();
-
-                NumbersAdapterTimeList numbersAdapter = new NumbersAdapterTimeList(
-                        time_timeList.length,
-                        time_timeList, place_timeList, activity_timeList);
-                numbersList.setAdapter(numbersAdapter);
+//
+//                NumbersAdapterTimeList numbersAdapter = new NumbersAdapterTimeList(
+//                        time_timeList.length,
+//                numbersList.setAdapter(numbersAdapter);
+//                time_timeList, place_timeList, activity_timeList);
                 break;
 
             case R.id.ib_global_activity:

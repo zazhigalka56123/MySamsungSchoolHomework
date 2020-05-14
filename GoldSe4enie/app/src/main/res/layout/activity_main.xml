@@ -26,8 +26,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="400dp"
                     android:src="@mipmap/lol"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:layout_editor_absoluteX="0dp" />
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <EditText
                     android:id="@+id/et_password"
@@ -36,7 +37,6 @@
                     android:layout_marginTop="40dp"
                     android:hint=" Введите пароль"
                     android:inputType="textPassword"
-
                     android:textColorHint="@color/grey"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.505"

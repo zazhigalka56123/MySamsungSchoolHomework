@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -24,6 +25,7 @@ import androidx.fragment.app.DialogFragment;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -45,6 +47,7 @@ public class CreateTLActivity extends AppCompatActivity implements View.OnClickL
     private Button bt_set_place;
     private Button bt_add_tl;
     private Button bt_add_item_tl;
+    private Button bt_preview_tl;
 
     private Spinner spinner_otryad;
     private Spinner spinner_napr;
@@ -55,21 +58,23 @@ public class CreateTLActivity extends AppCompatActivity implements View.OnClickL
     private String TimeNowHoure;
     private String DateNowDay;
     private String DateNowMonth;
+
     private String vizov;
 
     private ArrayList<String> TimeStart = new ArrayList<>();
-    private ArrayList<String> TimeEnd = new ArrayList<>();
-    private ArrayList<String> name = new ArrayList<>();
-    private ArrayList<String> place = new ArrayList<>();
-    private String TimeStartStr = "";
-    private String TimeEndStr = "";
-    private String nameStr = "";
-    private String placeStr = "";
-    private String Date = "";
-    private String DateOld = "";
-    private String CampType = "Наука";
-    private String CampTypeOld = "";
-    private int CampNumber = 1;
+    private ArrayList<String> TimeEnd   = new ArrayList<>();
+    private ArrayList<String> name      = new ArrayList<>();
+    private ArrayList<String> place     = new ArrayList<>();
+    private String TimeStartStr         = "";
+    private String TimeEndStr           = "";
+    private String nameStr              = "";
+    private String placeStr             = "";
+    private String Date                 = "";
+    private String DateOld              = "";
+    private String CampType             = "Наука";
+    private String CampTypeOld          = "";
+
+    private int CampNumber    = 1;
     private int CampNumberOld = 0;
 
     private int items = 0;
@@ -93,7 +98,14 @@ public class CreateTLActivity extends AppCompatActivity implements View.OnClickL
     @SuppressLint("ResourceAsColor")
     @Override
     public void onClick(View v) {
+        String[] a = updateTime();
+        TimeNowMinute = a[0];
+        TimeNowHoure  = a[1];
+        DateNowDay    = a[2];
+        DateNowMonth  = a[4];
+
         switch (v.getId()) {
+
             case R.id.bt_time_start:
                 DialogFragment timePicker = new TimePickerFragment();
                 timePicker.show(getSupportFragmentManager(), "time picker");
@@ -166,17 +178,6 @@ public class CreateTLActivity extends AppCompatActivity implements View.OnClickL
                     tv_error_tl.setText("Невозможно редактировать расписание на сегодня!");
                     tv_error_tl.setTextColor(R.color.red);
 
-//                } else if (CampType.equals("") || CampType.equals("...") || CampNumber == 0) {
-//                    Log.d("Gay", CampType);
-//                    Log.d("Gay", String.valueOf(CampNumber));
-//                    tv_error_tl.setText("Укажите отряд/направление");
-//                    tv_error_tl.setTextColor(R.color.red);
-
-//                } else if (!DateOld.equals(Date) || CampNumber != CampNumberOld || !CampType.equals(CampTypeOld)) {
-//
-//                    tv_error_tl.setText("Не изменяйте дату/номер отряда/направление!");
-//                    tv_error_tl.setTextColor(R.color.red);
-
                 } else {
 
                     TimeStart.add(TimeStartStr);
@@ -195,12 +196,18 @@ public class CreateTLActivity extends AppCompatActivity implements View.OnClickL
 
                     items += 1;
 
-
-
                     Toast.makeText(CreateTLActivity.this, "Записано!", Toast.LENGTH_SHORT).show();
                 }
                 break;
+            case R.id.bt_preview_tl:
+
+                TimeList timeListPreview = new TimeList(Date, CampNumber, CampType, TimeStart, TimeEnd, name, place);
+                Intent intentPreview = new Intent(v.getContext(), PreviewActivityTL.class);
+                intentPreview.putExtra("tl", (Serializable) timeListPreview);
+                v.getContext().startActivity(intentPreview);
+
             case R.id.bt_add_tl:
+
                 Toast.makeText(CreateTLActivity.this, "Добавлено!", Toast.LENGTH_SHORT).show();
                 TimeList timeList = new TimeList(Date, CampNumber, CampType, TimeStart, TimeEnd, name, place);
                 Ref.push().setValue(timeList);
@@ -305,22 +312,27 @@ public class CreateTLActivity extends AppCompatActivity implements View.OnClickL
 
         database = FirebaseDatabase.getInstance();
         Ref = database.getReference("Time list");
+
+        bt_preview_tl.findViewById(R.id.bt_preview_tl);
+        bt_preview_tl.setOnClickListener(this);
     }
 
-    public void updateTime() {
+    public static String[] updateTime() {
         Date currentDate = new Date();
-
+        String [] a = new String[4];
         DateFormat timeFormatMinute = new SimpleDateFormat("mm", Locale.getDefault());
-        TimeNowMinute = timeFormatMinute.format(currentDate);
+        a[0] = timeFormatMinute.format(currentDate);
 
         DateFormat timeFormatHoure = new SimpleDateFormat("HH", Locale.getDefault());
-        TimeNowHoure = timeFormatHoure.format(currentDate);
+        a[1] = timeFormatHoure.format(currentDate);
 
         DateFormat dateFormatDay = new SimpleDateFormat("dd", Locale.getDefault());
-        DateNowDay = dateFormatDay.format(currentDate);
+        a[2] = dateFormatDay.format(currentDate);
 
         DateFormat dateFormatMonth = new SimpleDateFormat("MM", Locale.getDefault());
-        DateNowMonth = dateFormatMonth.format(currentDate);
+        a[3] = dateFormatMonth.format(currentDate);
+
+        return a;
     }
 
     @Override
