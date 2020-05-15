@@ -218,6 +218,10 @@ public class CreateTLActivity extends AppCompatActivity implements View.OnClickL
                 Log.d("tl", String.valueOf(timeList.timeEnd));
                 Log.d("tl", String.valueOf(timeList.name));
                 Log.d("tl", String.valueOf(timeList.place));
+
+                Intent intentLvl2 = new Intent(v.getContext(), MainActivityLvl2.class);
+                v.getContext().startActivity(intentLvl2);
+                break;
         }
     }
 

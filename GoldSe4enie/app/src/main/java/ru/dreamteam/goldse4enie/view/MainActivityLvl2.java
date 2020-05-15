@@ -10,15 +10,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import ru.dreamteam.goldse4enie.R;
 
 public class MainActivityLvl2 extends AppCompatActivity implements View.OnClickListener {
+    private Button buttonTimeList;
+    private Button buttonLocalActivity;
+    private Button buttonGlobalActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_lvl2);
 
-        Button buttonTimeList       = findViewById(R.id.buttonTimeList);
-        Button buttonLocalActivity  = findViewById(R.id.buttonLocalActivity);
-        Button buttonGlobalActivity = findViewById(R.id.buttonGlobalActivity);
+        buttonTimeList       = findViewById(R.id.buttonTimeList);
+        buttonLocalActivity  = findViewById(R.id.buttonLocalActivity);
+        buttonGlobalActivity = findViewById(R.id.buttonGlobalActivity);
 
         buttonTimeList.      setOnClickListener(this);
         buttonLocalActivity. setOnClickListener(this);
@@ -29,8 +32,12 @@ public class MainActivityLvl2 extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.buttonTimeList:
-                Intent intent1 = new Intent(v.getContext(), CreateTLActivity.class);
-                v.getContext().startActivity(intent1);
+                Intent intentTimeList = new Intent(v.getContext(), CreateTLActivity.class);
+                v.getContext().startActivity(intentTimeList);
+                break;
+            case R.id.buttonGlobalActivity:
+                Intent intentGlobalActivity = new Intent(v.getContext(), CreateGlobalActivity.class);
+                v.getContext().startActivity(intentGlobalActivity);
                 break;
         }
     }
