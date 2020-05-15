@@ -39,6 +39,12 @@ public class MainActivityLvl2 extends AppCompatActivity implements View.OnClickL
                 Intent intentGlobalActivity = new Intent(v.getContext(), CreateGlobalActivity.class);
                 v.getContext().startActivity(intentGlobalActivity);
                 break;
+            case R.id.buttonLocalActivity:
+                Intent intentlocalActivity = new Intent(v.getContext(), CreateLocalActivity.class);
+                v.getContext().startActivity(intentlocalActivity);
+                break;
+
+
         }
     }
 }
