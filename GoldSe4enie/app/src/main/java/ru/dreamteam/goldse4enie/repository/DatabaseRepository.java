@@ -44,12 +44,8 @@ public class DatabaseRepository {
 
             do {
                 // получаем значения по номерам столбцов
-                User user = new User(userCursor.getInt(idColIndex),
-                        userCursor.getInt(nameColIndex),
-                        userCursor.getInt(passwordColIndex),
-                        userCursor.getInt(lvlColIndex));
-                userCursor.close();
-                return user;
+
+                return null;
                 // переход на следующую строку
                 // а если следующей нет (текущая - последняя), то false - выходим из цикла
             } while (userCursor.moveToNext());
@@ -74,11 +70,7 @@ public class DatabaseRepository {
             ArrayList<User> userList = new ArrayList();
             do {
                 // получаем значения по номерам столбцов
-                User user = new User(userCursor.getInt(idColIndex),
-                        userCursor.getInt(nameColIndex),
-                        userCursor.getInt(passwordColIndex),
-                        userCursor.getInt(lvlColIndex));
-                userList.add(user);
+
                 // переход на следующую строку
                 // а если следующей нет (текущая - последняя), то false - выходим из цикла
             } while (userCursor.moveToNext());

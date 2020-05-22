@@ -9,9 +9,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".view.CreateLocalActivity"></activity>
+
         <activity android:name=".view.PreviewActivityTL" />
         <activity android:name=".view.CreateGlobalActivity" />
+        <activity android:name=".view.CreateLocalActivity" />
         <activity android:name=".view.CreateTLActivity" />
         <activity android:name=".view.MainActivityLvl2" />
         <activity android:name=".view.MainActivity">

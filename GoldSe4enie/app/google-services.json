@@ -1,34 +1,42 @@
 {
   "project_info": {
-    "project_number": "825319878557",
-    "firebase_url": "https://gold-se4enie-lvl2-test.firebaseio.com",
-    "project_id": "gold-se4enie-lvl2-test",
-    "storage_bucket": "gold-se4enie-lvl2-test.appspot.com"
+    "project_number": "642134116359",
+    "firebase_url": "https://gold-se4enie-54811.firebaseio.com",
+    "project_id": "gold-se4enie-54811",
+    "storage_bucket": "gold-se4enie-54811.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:825319878557:android:a24f741968b8ece01f0974",
+        "mobilesdk_app_id": "1:642134116359:android:5fc2bd9e1bddbbdd23c2a2",
         "android_client_info": {
           "package_name": "ru.dreamteam.goldse4enie"
         }
       },
       "oauth_client": [
         {
-          "client_id": "825319878557-4lcnn8a5s298v6hjh6stgd30oaoubs95.apps.googleusercontent.com",
+          "client_id": "642134116359-5e8ivt9iaofbsk8hiacb133l9gnnmih1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ru.dreamteam.goldse4enie",
+            "certificate_hash": "4b4312126adb9fb107cfca77461f20ec61da6a4e"
+          }
+        },
+        {
+          "client_id": "642134116359-b60d53dnqgcstgb8n25l3nebthvmh2s5.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCxSNcJPs4pWXdG0kWvBGuXikLKTDursIo"
+          "current_key": "AIzaSyBjuTwXvcC5QWD4Fenhbqs4pE9MPOySakE"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "825319878557-4lcnn8a5s298v6hjh6stgd30oaoubs95.apps.googleusercontent.com",
+              "client_id": "642134116359-b60d53dnqgcstgb8n25l3nebthvmh2s5.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

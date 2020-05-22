@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-
     android:layout_height="match_parent"
     android:background="@color/white"
     tools:context=".view.MainActivityLvl2">
@@ -76,8 +75,9 @@
                 android:background="@drawable/shape_button"
                 android:text="создать расписание"
                 android:textColor="@color/colorPrimaryDark"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:layout_editor_absoluteX="16dp" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <Button
                 android:id="@+id/buttonLocalActivity"
@@ -87,8 +87,9 @@
                 android:background="@drawable/shape_button"
                 android:text="создать локальную активность"
                 android:textColor="@color/colorPrimaryDark"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:layout_editor_absoluteX="30dp" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <Button
                 android:id="@+id/buttonGlobalActivity"
@@ -98,8 +99,9 @@
                 android:background="@drawable/shape_button"
                 android:text="создать глобальную активность"
                 android:textColor="@color/colorPrimaryDark"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:layout_editor_absoluteX="30dp" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

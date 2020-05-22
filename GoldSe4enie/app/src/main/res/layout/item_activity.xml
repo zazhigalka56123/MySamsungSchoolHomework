@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="3dp"
-    android:paddingTop="20dp"
+    android:layout_margin="10dp"
+    android:elevation="20dp"
     android:background="@color/white">
 
     <LinearLayout
@@ -29,7 +29,6 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0"
                 android:text="10:00"
-                android:textStyle="bold"
                 android:textAlignment="center"
                 android:textColor="@color/blue"
                 android:textSize="25dp" />
@@ -40,7 +39,6 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0"
                 android:text="12:00"
-                android:textStyle="bold"
                 android:textAlignment="center"
                 android:textColor="@color/blue"
                 android:textSize="25dp" />
@@ -62,8 +60,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Занятие"
-                android:textStyle="bold"
-                android:textColor="@color/blue"
+                android:textColor="@color/colorPrimaryDark"
                 android:textSize="20dp" />
 
 
@@ -73,7 +70,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0"
                 android:text="Место"
-                android:textColor="@color/blue"
+                android:textColor="@color/grey"
                 android:textSize="15dp" />
 
         </LinearLayout>
@@ -94,8 +91,7 @@
             android:layout_height="30dp"
             android:background="@drawable/shape_button"
             android:text="Пойду"
-            android:textStyle="bold"
-            android:textColor="@color/blue"
+            android:textColor="@color/grey"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
@@ -110,8 +106,7 @@
             android:layout_height="30dp"
             android:background="@drawable/shape_button"
             android:text="  Информация  "
-            android:textStyle="bold"
-            android:textColor="@color/blue"
+            android:textColor="@color/grey"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />

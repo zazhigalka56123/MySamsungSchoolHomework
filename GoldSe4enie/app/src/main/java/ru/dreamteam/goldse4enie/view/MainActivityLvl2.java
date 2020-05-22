@@ -22,9 +22,8 @@ public class MainActivityLvl2 extends AppCompatActivity implements View.OnClickL
         buttonTimeList       = findViewById(R.id.buttonTimeList);
         buttonLocalActivity  = findViewById(R.id.buttonLocalActivity);
         buttonGlobalActivity = findViewById(R.id.buttonGlobalActivity);
-
-        buttonTimeList.      setOnClickListener(this);
-        buttonLocalActivity. setOnClickListener(this);
+        buttonTimeList.setOnClickListener(this);
+        buttonLocalActivity.setOnClickListener(this);
         buttonGlobalActivity.setOnClickListener(this);
     }
 
@@ -40,10 +39,9 @@ public class MainActivityLvl2 extends AppCompatActivity implements View.OnClickL
                 v.getContext().startActivity(intentGlobalActivity);
                 break;
             case R.id.buttonLocalActivity:
-                Intent intentlocalActivity = new Intent(v.getContext(), CreateLocalActivity.class);
-                v.getContext().startActivity(intentlocalActivity);
+                Intent intentLocalActivity = new Intent(v.getContext(), CreateLocalActivity.class);
+                v.getContext().startActivity(intentLocalActivity);
                 break;
-
 
         }
     }

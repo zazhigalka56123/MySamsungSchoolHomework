@@ -7,6 +7,7 @@ import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
+import androidx.navigation.NavType;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -31,12 +33,14 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Date;
 import java.util.Locale;
 
 import ru.dreamteam.goldse4enie.DatePickerFragememt;
 import ru.dreamteam.goldse4enie.R;
 import ru.dreamteam.goldse4enie.TimePickerFragment;
 import ru.dreamteam.goldse4enie.domain.TimeList;
+import ru.dreamteam.goldse4enie.domain.TimeListItem;
 
 public class CreateTLActivity extends AppCompatActivity implements View.OnClickListener, TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener, AdapterView.OnItemSelectedListener {
 
@@ -48,37 +52,23 @@ public class CreateTLActivity extends AppCompatActivity implements View.OnClickL
     private Button bt_add_tl;
     private Button bt_add_item_tl;
     private Button bt_preview_tl;
+    private Button bt_set_otryad;
 
-    private Spinner spinner_otryad;
     private Spinner spinner_napr;
 
     private TextView tv_error_tl;
 
-    private String TimeNowMinute;
-    private String TimeNowHoure;
-    private String DateNowDay;
-    private String DateNowMonth;
-
+    private ArrayList<TimeListItem> timeListItemArrayList = new ArrayList<TimeListItem>();
+    private TimeListItem timeListItem;
     private String vizov;
 
-    private ArrayList<String> TimeStart = new ArrayList<>();
-    private ArrayList<String> TimeEnd   = new ArrayList<>();
-    private ArrayList<String> name      = new ArrayList<>();
-    private ArrayList<String> place     = new ArrayList<>();
-    private String TimeStartStr         = "";
-    private String TimeEndStr           = "";
-    private String nameStr              = "";
-    private String placeStr             = "";
-    private String Date                 = "";
-    private String DateOld              = "";
-    private String CampType             = "Наука";
-    private String CampTypeOld          = "";
-
-    private int CampNumber    = 1;
-    private int CampNumberOld = 0;
-
-    private int items = 0;
-
+    private String name;
+    private String place;
+    private String timeStart;
+    private String timeEnd;
+    private String date;
+    private String campType;
+    private int campNumber;
     private FirebaseDatabase database;
     private DatabaseReference Ref;
 
@@ -87,22 +77,11 @@ public class CreateTLActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_t_l);
 
-        init();
-        updateTime();
-        // ссылка на realtime database https://console.firebase.google.com/project/gold-se4enie-lvl2-test/database/gold-se4enie-lvl2-test/data
-        bt_date.setText(DateNowDay + "." + DateNowMonth);
-        bt_time_start.setText(TimeNowHoure + ":" + TimeNowMinute);
-        bt_time_end.setText(TimeNowHoure + ":" + TimeNowMinute);
-    }
+        init();    }
 
     @SuppressLint("ResourceAsColor")
     @Override
     public void onClick(View v) {
-        String[] a = updateTime();
-        TimeNowMinute = a[0];
-        TimeNowHoure  = a[1];
-        DateNowDay    = a[2];
-        DateNowMonth  = a[4];
 
         switch (v.getId()) {
 
@@ -123,6 +102,28 @@ public class CreateTLActivity extends AppCompatActivity implements View.OnClickL
                 datePicker.show(getSupportFragmentManager(), "date picker");
                 break;
 
+            //Установка отряда
+            case R.id.bt_set_otryad:
+                AlertDialog.Builder builderOtr = new AlertDialog.Builder(CreateTLActivity.this,
+                        R.style.Theme_AppCompat_Dialog_Alert);
+                final View viewOtr = getLayoutInflater().inflate(R.layout.dialog_et, null);
+                builderOtr.setView(viewOtr);
+                builderOtr.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        EditText editText = viewOtr.findViewById(R.id.et_dialog);
+                        bt_set_otryad.setText(editText.getText().toString());
+                        campNumber = Integer.parseInt(editText.getText().toString());
+                    }
+                });
+                builderOtr.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+                AlertDialog alertDialogOtr = builderOtr.create();
+                alertDialogOtr.show();
+                break;
+
             case R.id.bt_set_name:
                 AlertDialog.Builder builderName = new AlertDialog.Builder(CreateTLActivity.this,
                         R.style.Theme_AppCompat_Dialog_Alert);
@@ -132,7 +133,7 @@ public class CreateTLActivity extends AppCompatActivity implements View.OnClickL
                     public void onClick(DialogInterface dialog, int id) {
                         EditText editText = viewName.findViewById(R.id.et_dialog);
                         bt_set_name.setText(editText.getText().toString());
-                        nameStr = editText.getText().toString();
+                        name = editText.getText().toString();
                     }
                 });
                 builderName.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -153,7 +154,7 @@ public class CreateTLActivity extends AppCompatActivity implements View.OnClickL
                     public void onClick(DialogInterface dialog, int id) {
                         EditText editText = viewPlace.findViewById(R.id.et_dialog);
                         bt_set_place.setText(editText.getText().toString());
-                        placeStr = editText.getText().toString();
+                        place = editText.getText().toString();
 
                     }
                 });
@@ -167,61 +168,31 @@ public class CreateTLActivity extends AppCompatActivity implements View.OnClickL
                 break;
 
             case R.id.bt_add_item_tl:
-
-                if (TimeEndStr.equals("") || TimeStartStr.equals("") || Date.equals("")) {
-
-                    tv_error_tl.setText("Заполните все поля!");
-                    tv_error_tl.setTextColor(R.color.red);
-
-                } else if (Date.equals(DateNowDay + "." + DateNowMonth) || Date.equals("")) {
-
-                    tv_error_tl.setText("Невозможно редактировать расписание на сегодня!");
-                    tv_error_tl.setTextColor(R.color.red);
-
-                } else {
-
-                    TimeStart.add(TimeStartStr);
-                    TimeEnd.add(TimeEndStr);
-                    name.add(nameStr);
-                    place.add(placeStr);
-
-                    DateOld = Date;
-                    CampTypeOld = CampType;
-                    CampNumberOld = CampNumber;
-
-                    TimeStartStr = "";
-                    TimeEndStr = "";
-                    nameStr = "";
-                    placeStr = "";
-
-                    items += 1;
-
-                    Toast.makeText(CreateTLActivity.this, "Записано!", Toast.LENGTH_SHORT).show();
-                }
+                timeListItem = new TimeListItem(date, campNumber, campType, timeStart, timeEnd, name, place);
+                timeListItemArrayList.add(timeListItem);
+                Toast.makeText(CreateTLActivity.this, "Добавлено!", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.bt_preview_tl:
-
-                TimeList timeListPreview = new TimeList(Date, CampNumber, CampType, TimeStart, TimeEnd, name, place);
+                TimeList timeListPreview = new TimeList(timeListItemArrayList.size(), timeListItem.date,
+                        timeListItem.campNumber, timeListItem.campType, timeListItemArrayList);
                 Intent intentPreview = new Intent(v.getContext(), PreviewActivityTL.class);
-                intentPreview.putExtra("tl", (Serializable) timeListPreview);
+                intentPreview.putExtra("item",         timeListPreview.item);
+                intentPreview.putExtra("date",         timeListPreview.date);
+                intentPreview.putExtra("campNumber",   timeListPreview.campNumber);
+                intentPreview.putExtra("campType",     timeListPreview.campType);
+//                intentPreview.putParcelableArrayListExtra("timeListArray", (ArrayList<? extends Parcelable>) timeListPreview.timeListArray);
                 v.getContext().startActivity(intentPreview);
 
+
             case R.id.bt_add_tl:
-
+                TimeListItem timeListItemLast = new TimeListItem(date, campNumber, campType, timeStart, timeEnd, name, place);
+                if (timeListItemLast != timeListItem)
+                    timeListItemArrayList.add(timeListItemLast);
+                TimeList timeList = new TimeList(timeListItemArrayList.size(), timeListItemLast.date,
+                        timeListItemLast.campNumber, timeListItemLast.campType, timeListItemArrayList);
+                Ref.child("" + campNumber).child(date.substring(0,2)).setValue(timeList);
                 Toast.makeText(CreateTLActivity.this, "Добавлено!", Toast.LENGTH_SHORT).show();
-                TimeList timeList = new TimeList(Date, CampNumber, CampType, TimeStart, TimeEnd, name, place);
-                Ref.push().setValue(timeList);
-                Log.d("tl", String.valueOf(timeList.date));
-                Log.d("tl", String.valueOf(timeList.campNumber));
-                Log.d("tl", String.valueOf(timeList.campType));
-                Log.d("tl", String.valueOf(timeList.timeStart));
-                Log.d("tl", String.valueOf(timeList.timeEnd));
-                Log.d("tl", String.valueOf(timeList.name));
-                Log.d("tl", String.valueOf(timeList.place));
 
-                Intent intentLvl2 = new Intent(v.getContext(), MainActivityLvl2.class);
-                v.getContext().startActivity(intentLvl2);
-                break;
         }
     }
 
@@ -244,10 +215,10 @@ public class CreateTLActivity extends AppCompatActivity implements View.OnClickL
             hour = String.valueOf(hourOfDay);
         if (vizov == "1") {
             bt_time_start.setText(hour + ":" + min);
-            TimeStartStr = hour + ":" + min;
+            timeStart = hour + ":" + min;
         } else if (vizov == "2") {
             bt_time_end.setText(hour + ":" + min);
-            TimeEndStr = hour + ":" + min;
+            timeEnd = hour + ":" + min;
         }
     }
 
@@ -269,7 +240,7 @@ public class CreateTLActivity extends AppCompatActivity implements View.OnClickL
         else
             d = String.valueOf(dayOfMonth);
         bt_date.setText(d + "." + m);
-        Date = (d + "." + m);
+        date = (d + "." + m);
     }
 
 
@@ -296,29 +267,24 @@ public class CreateTLActivity extends AppCompatActivity implements View.OnClickL
         bt_add_item_tl.setOnClickListener(this);
 
         spinner_napr = findViewById(R.id.spinner_napr);
-        spinner_otryad = findViewById(R.id.spinner_otryad);
 
         tv_error_tl = findViewById(R.id.tv_error_tl);
-
-        ArrayAdapter<CharSequence> arrayAdapterOtr = ArrayAdapter.createFromResource(this,
-                R.array.otr, android.R.layout.simple_list_item_1);
-        arrayAdapterOtr.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
         ArrayAdapter<CharSequence> arrayAdapterNapr = ArrayAdapter.createFromResource(this,
                 R.array.napr, android.R.layout.simple_list_item_1);
-        arrayAdapterOtr.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        spinner_otryad.setAdapter(arrayAdapterOtr);
         spinner_napr.setAdapter(arrayAdapterNapr);
 
-        spinner_otryad.setOnItemSelectedListener(this);
         spinner_napr.setOnItemSelectedListener(this);
 
         database = FirebaseDatabase.getInstance();
-        Ref = database.getReference("Time list");
+        Ref = database.getReference("Time List");
 
-        bt_preview_tl.findViewById(R.id.bt_preview_tl);
+        bt_preview_tl = findViewById(R.id.bt_preview_tl);
         bt_preview_tl.setOnClickListener(this);
+
+        bt_set_otryad = findViewById(R.id.bt_set_otryad);
+        bt_set_otryad.setOnClickListener(this);
+
     }
 
     public static String[] updateTime() {
@@ -341,8 +307,7 @@ public class CreateTLActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        CampType = (spinner_napr.getSelectedItem().toString());
-//        CampNumber = (int) spinner_napr.getSelectedItem();
+        campType = (spinner_napr.getSelectedItem().toString());
     }
 
     @Override

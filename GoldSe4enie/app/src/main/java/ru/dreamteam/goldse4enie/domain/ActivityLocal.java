@@ -1,7 +1,6 @@
 package ru.dreamteam.goldse4enie.domain;
 
 public class ActivityLocal {
-    public final String date;
     public final int maxPeople;
     public final int campNumber;
     public final String campType;
@@ -11,10 +10,10 @@ public class ActivityLocal {
     public final String place;
     public final String description;
 
-    public ActivityLocal(String date, int maxPeople, int campNumber, String campType,
+    public ActivityLocal(int maxPeople, int campNumber, String campType,
                          String timeStart, String timeEnd, String name, String place,
                          String description) {
-        this.date = date;
+
         this.maxPeople = maxPeople;
         this.campNumber = campNumber;
         this.campType = campType;

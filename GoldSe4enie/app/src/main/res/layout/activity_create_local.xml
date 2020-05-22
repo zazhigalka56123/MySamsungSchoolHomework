@@ -408,7 +408,7 @@
                 android:layout_weight="1" />
 
             <Button
-                android:id="@+id/bt_add_item_tl"
+                android:id="@+id/bt_add_tl"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
                 android:background="@drawable/shape_button"

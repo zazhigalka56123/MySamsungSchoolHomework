@@ -1,21 +1,24 @@
 package ru.dreamteam.goldse4enie.domain;
 
-/**
- * Модель данных пользователя
- */
-public class User {
-    public final int id;
-    public final int name;
-    public final int password;
-    public final int lvl;
-    public final String age = "";
-    public final int campNumber = 0;
-    public final String campType = "";
+import java.io.Serializable;
 
-    public User(int id, int name, int password,int lvl) {
+public class User implements Serializable {
+    public  int id;
+    public  String name;
+    public  String password;
+    public  int lvl;
+    public  int age;
+    public  int campNumber;
+    public  String campType  ;
+
+    public User(int id, String name, String password,int lvl, int age,int campNumber, String campType) {
         this.id = id;
         this.name = name;
         this.password = password;
         this.lvl = lvl;
+        this.age = age;
+        this.campNumber = campNumber;
+        this.campType = campType;
     }
+    public User(){}
 }

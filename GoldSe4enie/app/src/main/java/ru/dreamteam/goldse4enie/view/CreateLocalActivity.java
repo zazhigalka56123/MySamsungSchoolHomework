@@ -47,10 +47,6 @@ public class CreateLocalActivity extends AppCompatActivity implements AdapterVie
 
     private Spinner spinner_napr;
 
-    private String TimeNowMinute;
-    private String TimeNowHoure;
-    private String DateNowDay;
-    private String DateNowMonth;
     private String vizov;
 
 
@@ -73,14 +69,6 @@ public class CreateLocalActivity extends AppCompatActivity implements AdapterVie
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_local);
         init();
-        String[] a = CreateTLActivity.updateTime();
-        TimeNowMinute = a[0];
-        TimeNowHoure = a[1];
-        DateNowDay = a[2];
-        DateNowMonth = a[4];
-        bt_date.setText(DateNowDay + "." + DateNowMonth);
-        bt_time_start.setText(TimeNowHoure + ":" + TimeNowMinute);
-        bt_time_end.setText(TimeNowHoure + ":" + TimeNowMinute);
     }
 
     public void init() {
@@ -128,7 +116,8 @@ public class CreateLocalActivity extends AppCompatActivity implements AdapterVie
         spinner_napr.setOnItemSelectedListener(this);
 
         database = FirebaseDatabase.getInstance();
-        Ref = database.getReference("Time list");
+        Ref = database.getReference("LA Time List");
+
     }
 
     @Override
@@ -143,11 +132,11 @@ public class CreateLocalActivity extends AppCompatActivity implements AdapterVie
 
     @Override
     public void onClick(View v) {
-        String[] a = CreateTLActivity.updateTime();
-        TimeNowMinute = a[0];
-        TimeNowHoure = a[1];
-        DateNowDay = a[2];
-        DateNowMonth = a[4];
+//        String[] a = CreateTLActivity.updateTime();
+//        TimeNowMinute = a[0];
+//        TimeNowHoure = a[1];
+//        DateNowDay = a[2];
+//        DateNowMonth = a[4];
         switch (v.getId()) {
 
             //Установка начального вермени
@@ -287,9 +276,9 @@ public class CreateLocalActivity extends AppCompatActivity implements AdapterVie
 
             //Загрузка
             case R.id.bt_add_tl:
-                ActivityLocal activity = new ActivityLocal(date, maxPeople, campNumber, campType,
+                ActivityLocal activity = new ActivityLocal(maxPeople, campNumber, campType,
                         timeStart, timeEnd, name, place, description);
-                Ref.push().setValue(activity);
+                Ref.child("" + campNumber).child(date.substring(0,2)).push().setValue(activity);
                 Toast.makeText(CreateLocalActivity.this, "Добавлено!", Toast.LENGTH_SHORT).show();
                 Intent intentLvl2 = new Intent(v.getContext(), MainActivityLvl2.class);
                 v.getContext().startActivity(intentLvl2);

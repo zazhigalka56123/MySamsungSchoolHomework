@@ -12,10 +12,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import ru.dreamteam.goldse4enie.R;
+import ru.dreamteam.goldse4enie.domain.TimeList;
+
 
 public class NumbersAdapterTimeList extends RecyclerView.Adapter<NumbersAdapterTimeList.NumberViewHolder> {
 
     private int numberItems;
+
+    TimeList TL;
 
     private ArrayList<String> timeStart;
     private ArrayList<String> timeEnd;
@@ -27,17 +31,19 @@ public class NumbersAdapterTimeList extends RecyclerView.Adapter<NumbersAdapterT
     private TextView tv_time_start;
     private TextView tv_time_end;
 
-    public NumbersAdapterTimeList(int numberOfItem, ArrayList<String> timeStartArr, ArrayList<String> timeEndArr,
-                                  ArrayList<String> placeArr, ArrayList<String> activityArr ) {
-        numberItems = numberOfItem;
-        timeStart = timeStartArr;
-        timeEnd = timeEndArr;
-        place = placeArr;
-        activity = activityArr;
+    public NumbersAdapterTimeList( int numberItems, ArrayList<String> timeStart, ArrayList<String> timeEnd, ArrayList<String> place, ArrayList<String> activity) {
+        this.numberItems = numberItems;
+        this.timeStart = timeStart;
+        this.timeEnd = timeEnd;
+        this.place = place;
+        this.activity = activity;
     }
 
     @Override
     public NumberViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
+
+
         Context context = parent.getContext();
         int layoutIdForListItem = R.layout.item_time_list;
 

@@ -20,12 +20,13 @@ import androidx.fragment.app.DialogFragment;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.sql.Ref;
 import java.util.Calendar;
 
 import ru.dreamteam.goldse4enie.DatePickerFragememt;
 import ru.dreamteam.goldse4enie.R;
 import ru.dreamteam.goldse4enie.TimePickerFragment;
-import ru.dreamteam.goldse4enie.domain.ActivitylGlobal;
+import ru.dreamteam.goldse4enie.domain.ActivityGlobal;
 
 public class CreateGlobalActivity extends AppCompatActivity implements View.OnClickListener,
         TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener {
@@ -42,11 +43,6 @@ public class CreateGlobalActivity extends AppCompatActivity implements View.OnCl
     private Button bt_set_description;
 
     private TextView tv_error_tl;
-
-    private String TimeNowMinute;
-    private String TimeNowHoure;
-    private String DateNowDay;
-    private String DateNowMonth;
     private String vizov;
 
 
@@ -68,14 +64,6 @@ public class CreateGlobalActivity extends AppCompatActivity implements View.OnCl
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_global);
         init();
-        String[] a = CreateTLActivity.updateTime();
-        TimeNowMinute = a[0];
-        TimeNowHoure = a[1];
-        DateNowDay = a[2];
-        DateNowMonth = a[4];
-        bt_date.setText(DateNowDay + "." + DateNowMonth);
-        bt_time_start.setText(TimeNowHoure + ":" + TimeNowMinute);
-        bt_time_end.setText(TimeNowHoure + ":" + TimeNowMinute);
     }
 
     public void init() {
@@ -103,23 +91,17 @@ public class CreateGlobalActivity extends AppCompatActivity implements View.OnCl
         bt_set_description = findViewById(R.id.bt_set_description);
         bt_set_description.setOnClickListener(this);
 
-        bt_add_tl = findViewById(R.id.bt_add_tl);
+        bt_add_tl = findViewById(R.id.bt_add_item_tl);
         bt_add_tl.setOnClickListener(this);
 
         tv_error_tl = findViewById(R.id.tv_error_tl);
 
         database = FirebaseDatabase.getInstance();
-        Ref = database.getReference("Time list");
-
+        Ref = database.getReference("GA Time List");
     }
 
     @Override
     public void onClick(View v) {
-        String[] a = CreateTLActivity.updateTime();
-        TimeNowMinute = a[0];
-        TimeNowHoure = a[1];
-        DateNowDay = a[2];
-        DateNowMonth = a[4];
 
 
         switch (v.getId()) {
@@ -260,12 +242,13 @@ public class CreateGlobalActivity extends AppCompatActivity implements View.OnCl
                 break;
 
             //Загрузка
-            case R.id.bt_add_tl:
-                ActivitylGlobal activity = new ActivitylGlobal(date, maxPeople, mainPeople, timeStart, timeEnd, name, place, description);
-                Ref.push().setValue(activity);
+            case R.id.bt_add_item_tl:
+                ActivityGlobal activity = new ActivityGlobal( maxPeople, mainPeople, timeStart, timeEnd, name, place, description);
+
+                Ref.child(date.substring(0,2)).setValue(activity);
                 Toast.makeText(CreateGlobalActivity.this, "Добавлено!", Toast.LENGTH_SHORT).show();
-                Intent intentLvl2 = new Intent(v.getContext(), MainActivityLvl2.class);
-                v.getContext().startActivity(intentLvl2);
+                Intent intentlvl2 = new Intent(v.getContext(), MainActivityLvl2.class);
+                v.getContext().startActivity(intentlvl2);
         }
     }
 
