@@ -8,10 +8,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -32,8 +34,6 @@ import ru.dreamteam.goldse4enie.domain.ActivityGlobalList;
 import ru.dreamteam.goldse4enie.domain.ActivityLocalList;
 import ru.dreamteam.goldse4enie.domain.TimeList;
 import ru.dreamteam.goldse4enie.domain.User;
-import ru.dreamteam.goldse4enie.getters.GetGlobalActivityList;
-import ru.dreamteam.goldse4enie.getters.GetLocalActivityList;
 
 public class MainActivityLvl1 extends AppCompatActivity implements View.OnClickListener {
     private ImageButton time_list;
@@ -42,37 +42,42 @@ public class MainActivityLvl1 extends AppCompatActivity implements View.OnClickL
     private ImageButton settings;
     private TextView app_name;
 
-    FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference myRef = database.getReference();
+    private FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private DatabaseReference myRef = database.getReference();
 
-    User CurrentUser;
-    TimeList CurrentTL;
-    ActivityLocalList CurrentLAL;
-    ActivityGlobalList CurrentGAL;
+    private User currentUser;
+    private TimeList currentTimeList;
+    private ActivityLocalList currentLocalActivityList;
+    private ActivityGlobalList currentGlobalActivityList;
 
-    ValueEventListener TLListener;
-    ValueEventListener LALListener;
-    ValueEventListener GALListener;
+    private ValueEventListener timeListListener;
+    private ValueEventListener localActivityListener;
+    private ValueEventListener globalActivityListener;
 
-    ArrayList time_timeListStart ;
-    ArrayList time_timeListEnd ;
-    ArrayList place_timeList ;
-    ArrayList activity_timeList ;
-    RecyclerView numbersList;
+    private ArrayList time_timeListStart ;
+    private ArrayList time_timeListEnd ;
+    private ArrayList place_timeList ;
+    private ArrayList activity_timeList ;
+    private RecyclerView numbersList;
+    private SwipeRefreshLayout swipeRefresh_lvl1;
 
-    ServiceConnection SerConn;
+    private boolean receivedDataTimeList       = true;
+    private boolean receivedDataLocalActivity  = true;
+    private boolean receivedDataGlobalActivity = true;
 
-    ArrayList<String> timeStart ;
-    ArrayList<String> timeEnd;
-    ArrayList<String> place;
-    ArrayList<String> activity;
+    private LinearLayoutManager layoutManager;
 
-    Intent intent;
+    private ServiceConnection SerConn;
 
-    String TimeNowMinute ;
-    String TimeNowHour   ;
-    String DateNowDay    ;
-    String DateNowMonth  ;
+    private ArrayList<String> timeStart ;
+    private ArrayList<String> timeEnd;
+    private ArrayList<String> place;
+    private ArrayList<String> activity;
+
+    private String TimeNowMinute ;
+    private String TimeNowHour   ;
+    private String DateNowDay    ;
+    private String DateNowMonth  ;
 
     @SuppressLint("RestrictedApi")
     @Override
@@ -80,89 +85,8 @@ public class MainActivityLvl1 extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_lvl1);
 
-        time_list = findViewById(R.id.ib_time_list);
-        local_activity = findViewById(R.id.ib_local_activity);
-        global_activity = findViewById(R.id.ib_global_activity);
-        settings = findViewById(R.id.bt_settings);
-        app_name = findViewById(R.id.textView2);
+        init();
 
-        time_list.setOnClickListener(this);
-        local_activity.setOnClickListener(this);
-        global_activity.setOnClickListener(this);
-        settings.setOnClickListener(this);
-
-        String[] a = updateTime();
-        TimeNowMinute = a[0];
-        TimeNowHour   = a[1];
-        DateNowDay    = a[2];
-        DateNowMonth  = a[3];
-
-        Bundle arguments = getIntent().getExtras();
-        CurrentUser = (User) arguments.getSerializable(User.class.getSimpleName());
-
-        app_name.setText(CurrentUser.name);
-
-        numbersList = findViewById(R.id.rv_list);
-
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
-        numbersList.setLayoutManager(layoutManager);
-
-        numbersList.setHasFixedSize(true);
-
-        TLListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // Get Post object and use the values to update the UI
-                CurrentTL = dataSnapshot.getValue(TimeList.class);
-
-                Log.d("TLGET","" + dataSnapshot.getChildrenCount());
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Getting Post failed, log a message
-                Log.w("TLGET", "loadPost:onCancelled", databaseError.toException());
-                // ...
-            }
-        };
-
-        LALListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // Get Post object and use the values to update the UI
-                CurrentLAL = dataSnapshot.getValue(ActivityLocalList.class);
-
-                Log.d("LALGET","" + dataSnapshot.getChildrenCount());
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Getting Post failed, log a message
-                Log.w("LALGET", "loadPost:onCancelled", databaseError.toException());
-                // ...
-            }
-        };
-
-        GALListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // Get Post object and use the values to update the UI
-                CurrentGAL = dataSnapshot.getValue(ActivityGlobalList.class);
-
-                Log.d("GALGET","" + dataSnapshot.getChildrenCount());
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Getting Post failed, log a message
-                Log.w("GALGET", "loadPost:onCancelled", databaseError.toException());
-                // ...
-            }
-        };
-
-        myRef.child("Time List").child("" + CurrentUser.campNumber).child(DateNowDay).addValueEventListener(TLListener);
-        myRef.child("LA Time List").child("" + CurrentUser.campNumber).child(DateNowDay).addValueEventListener(LALListener);
-        myRef.child("GA Time List").child(DateNowDay).addValueEventListener(GALListener);
     }
 
     @Override
@@ -180,72 +104,87 @@ public class MainActivityLvl1 extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.ib_time_list:
+                if (receivedDataTimeList == true) {
+                    RecyclerView numbersList = findViewById(R.id.rv_list);
 
-                RecyclerView numbersList = findViewById(R.id.rv_list);
+                    layoutManager = new LinearLayoutManager(this);
+                    numbersList.setLayoutManager(layoutManager);
 
-                LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-                numbersList.setLayoutManager(layoutManager);
+                    numbersList.setHasFixedSize(true);
 
-                numbersList.setHasFixedSize(true);
+                    timeStart = new ArrayList<>();
+                    timeEnd = new ArrayList<>();
+                    activity = new ArrayList<>();
+                    place = new ArrayList<>();
 
-                timeStart = new ArrayList<>();
-                timeEnd = new ArrayList<>();
-                activity = new ArrayList<>();
-                place = new ArrayList<>();
+                    for (int i = 0; i < currentTimeList.timeListArray.size(); i++) {
+                        timeStart.add(currentTimeList.timeListArray.get(i).timeStart);
+                        timeEnd.add(currentTimeList.timeListArray.get(i).timeEnd);
+                        activity.add(currentTimeList.timeListArray.get(i).name);
+                        place.add(currentTimeList.timeListArray.get(i).place);
+                    }
 
-                for (int i = 0; i < CurrentTL.timeListArray.size() ; i++) {
-                timeStart.add(CurrentTL.timeListArray.get(i).timeStart);
-                timeEnd.add(CurrentTL.timeListArray.get(i).timeEnd);
-                activity.add(CurrentTL.timeListArray.get(i).name);
-                place.add(CurrentTL.timeListArray.get(i).place);
+                    NumbersAdapterTimeList numbersAdapter = new NumbersAdapterTimeList(timeStart.size(), timeStart, timeEnd, place, activity);
+                    numbersList.setAdapter(numbersAdapter);
+                }else{
+                    Toast.makeText(this, "Отсутствуют данные( Напомните своему вожатому!", Toast.LENGTH_SHORT).show();
+
                 }
-
-                NumbersAdapterTimeList numbersAdapter = new NumbersAdapterTimeList(timeStart.size(), timeStart, timeEnd, place, activity);
-                numbersList.setAdapter(numbersAdapter);
                 break;
 
             case R.id.ib_global_activity:
-                numbersList = findViewById(R.id.rv_list);
+                if (receivedDataGlobalActivity == true) {
+                    numbersList = findViewById(R.id.rv_list);
 
-                layoutManager = new LinearLayoutManager(this);
-                numbersList.setLayoutManager(layoutManager);
+                    layoutManager = new LinearLayoutManager(this);
+                    numbersList.setLayoutManager(layoutManager);
 
-                numbersList.setHasFixedSize(true);
+                    numbersList.setHasFixedSize(true);
 
-                timeStart = new ArrayList<>();
-                timeEnd = new ArrayList<>();
-                activity = new ArrayList<>();
-                place = new ArrayList<>();
+                    timeStart = new ArrayList<>();
+                    timeEnd = new ArrayList<>();
+                    activity = new ArrayList<>();
+                    place = new ArrayList<>();
 
-                for (int i = 0; i < CurrentGAL.List.size() ; i++) {
-                    timeStart.add(CurrentGAL.List.get(i).timeStart);
-                    timeEnd.add(CurrentGAL.List.get(i).timeEnd);
-                    activity.add(CurrentGAL.List.get(i).name);
-                    place.add(CurrentGAL.List.get(i).place);
+                    for (int i = 0; i < currentGlobalActivityList.List.size(); i++) {
+                        timeStart.add(currentGlobalActivityList.List.get(i).timeStart);
+                        timeEnd.add(currentGlobalActivityList.List.get(i).timeEnd);
+                        activity.add(currentGlobalActivityList.List.get(i).name);
+                        place.add(currentGlobalActivityList.List.get(i).place);
+                    }
+
+                    NumbersAdapterLocalList numbersAdapterKek = new NumbersAdapterLocalList(timeStart.size(), timeStart, timeEnd, place, activity);
+                    numbersList.setAdapter(numbersAdapterKek);
+                }else {
+                    Toast.makeText(this, "Отсутствуют мероприятия( Что то здесь не так...", Toast.LENGTH_SHORT).show();
+
                 }
-
-                NumbersAdapterLocalList numbersAdapterKek = new NumbersAdapterLocalList(timeStart.size(), timeStart, timeEnd, place, activity);
-                numbersList.setAdapter(numbersAdapterKek);
                 break;
+
             case R.id.ib_local_activity:
-                numbersList = findViewById(R.id.rv_list);
-
-                layoutManager = new LinearLayoutManager(this);
-                numbersList.setLayoutManager(layoutManager);
-
-                numbersList.setHasFixedSize(true);
-
-                GetLocalActivityList getlocalActivityList = new GetLocalActivityList();
-
-                String[] time_activityList_ = getlocalActivityList.getTime();
-                String[] place_activityList_ = getlocalActivityList.getPlace();
-                String[] activity_activityList_ = getlocalActivityList.getActivity();
-
-                //NumbersAdapterLocalList numbersAdapterKk = new NumbersAdapterLocalList(
-                //        time_activityList_.length,
-                //        time_activityList_, place_activityList_, activity_activityList_);
-               // numbersList.setAdapter(numbersAdapterKk);
+                if (receivedDataLocalActivity == true) {
+                    numbersList = findViewById(R.id.rv_list);
+                    //                    //
+                    //                    //                    layoutManager = new LinearLayoutManager(this);
+                    //                    //                    numbersList.setLayoutManager(layoutManager);
+                    //                    //
+                    //                    //                    numbersList.setHasFixedSize(true);
+                    //                    //
+                    //                    //                    GetLocalActivityList getlocalActivityList = new GetLocalActivityList();
+                    //                    //
+                    //                    //                    String[] time_activityList_ = getlocalActivityList.getTime();
+                    //                    //                    String[] place_activityList_ = getlocalActivityList.getPlace();
+                    //                    //                    String[] activity_activityList_ = getlocalActivityList.getActivity();
+                    //                    //
+                    //                    //                    //NumbersAdapterLocalList numbersAdapterKk = new NumbersAdapterLocalList(
+                    //                    //                    //        time_activityList_.length,
+                    //                    //                    //        time_activityList_, place_activityList_, activity_activityList_);
+                    //                    //                   // numbersList.setAdapter(numbersAdapterKk);
+                }else {
+                    Toast.makeText(this, "Отсутствуют мероприятия( Организуйте их сами и сообщите вожатому!", Toast.LENGTH_SHORT).show();
+                }
                 break;
+
             case R.id.bt_settings:
                 Intent intentK = new Intent(v.getContext(), SettingsActivity.class);
                 v.getContext().startActivity(intentK);
@@ -271,4 +210,137 @@ public class MainActivityLvl1 extends AppCompatActivity implements View.OnClickL
 
         return a;
     }
+    
+    public void init(){
+
+        time_list         = findViewById(R.id.ib_time_list);
+        local_activity    = findViewById(R.id.ib_local_activity);
+        global_activity   = findViewById(R.id.ib_global_activity);
+        settings          = findViewById(R.id.bt_settings);
+        app_name          = findViewById(R.id.textView2);
+        numbersList       = findViewById(R.id.rv_list);
+        swipeRefresh_lvl1 = findViewById(R.id.swipeRefresh_lvl1);
+
+        time_list        .setOnClickListener(this);
+        local_activity   .setOnClickListener(this);
+        global_activity  .setOnClickListener(this);
+        settings         .setOnClickListener(this);
+        numbersList      .setHasFixedSize(true);
+
+        String[] a = updateTime();
+
+        TimeNowMinute = a[0];
+        TimeNowHour   = a[1];
+        DateNowDay    = a[2];
+        DateNowMonth  = a[3];
+
+        Bundle arguments = getIntent().getExtras();
+        currentUser = (User) arguments.getSerializable(User.class.getSimpleName());
+
+        app_name.setText(currentUser.name);
+
+        try {
+            myRef
+                .child("Time List")
+                .child(currentUser.campType)
+                .child("" + currentUser.campNumber)
+                .child(DateNowMonth)
+                .child(DateNowDay)
+                .addValueEventListener(timeListListener);
+
+        } catch(NullPointerException e) {
+            receivedDataTimeList = false;
+            Toast.makeText(this, "Отсутствуют данные( Напомните своему вожатому!", Toast.LENGTH_SHORT).show();
+        }
+
+        try {
+            myRef
+                    .child("Local Activity")
+                    .child(currentUser.campType)
+                    .child("" + currentUser.campNumber)
+                    .child(DateNowMonth)
+                    .child(DateNowDay)
+                    .addValueEventListener(localActivityListener);
+        } catch(NullPointerException e) {
+            receivedDataLocalActivity = false;
+        }
+
+        try {
+            myRef
+                    .child("Global Activity")
+                    .child(DateNowMonth)
+                    .child(DateNowDay)
+                    .addValueEventListener(globalActivityListener);
+
+        }catch(NullPointerException e) {
+            receivedDataGlobalActivity = false;
+        }
+
+
+        timeListListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // Get Post object and use the values to update the UI
+                currentTimeList = dataSnapshot.getValue(TimeList.class);
+
+                Log.d("TLGET","" + dataSnapshot.getChildrenCount());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Getting Post failed, log a message
+                Log.w("TLGET", "loadPost:onCancelled", databaseError.toException());
+                // ...
+            }
+        };
+
+        localActivityListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // Get Post object and use the values to update the UI
+                currentLocalActivityList = dataSnapshot.getValue(ActivityLocalList.class);
+
+                Log.d("LALGET","" + dataSnapshot.getChildrenCount());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Getting Post failed, log a message
+                Log.w("LALGET", "loadPost:onCancelled", databaseError.toException());
+                // ...
+            }
+        };
+
+        globalActivityListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // Get Post object and use the values to update the UI
+                currentGlobalActivityList = dataSnapshot.getValue(ActivityGlobalList.class);
+
+                Log.d("GALGET","" + dataSnapshot.getChildrenCount());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Getting Post failed, log a message
+                Log.w("GALGET", "loadPost:onCancelled", databaseError.toException());
+                // ...
+            }
+        };
+
+
+        swipeRefresh_lvl1.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+            }
+        });
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        numbersList.setLayoutManager(layoutManager);
+
+
+        
+    }
+
 }
