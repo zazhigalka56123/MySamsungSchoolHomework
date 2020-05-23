@@ -23,6 +23,7 @@ import androidx.fragment.app.DialogFragment;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import ru.dreamteam.goldse4enie.DatePickerFragememt;
@@ -59,7 +60,7 @@ public class CreateLocalActivity extends AppCompatActivity implements AdapterVie
     private String campType = "";
     private int campNumber = 0;
     private int maxPeople = 0;
-
+    private ArrayList<String> peoples = new ArrayList<String>();
 
     private FirebaseDatabase database;
     private DatabaseReference Ref;
@@ -116,7 +117,7 @@ public class CreateLocalActivity extends AppCompatActivity implements AdapterVie
         spinner_napr.setOnItemSelectedListener(this);
 
         database = FirebaseDatabase.getInstance();
-        Ref = database.getReference("LA Time List");
+        Ref = database.getReference();
 
     }
 
@@ -277,8 +278,15 @@ public class CreateLocalActivity extends AppCompatActivity implements AdapterVie
             //Загрузка
             case R.id.bt_add_tl:
                 ActivityLocal activity = new ActivityLocal(maxPeople, campNumber, campType,
-                        timeStart, timeEnd, name, place, description);
-                Ref.child("" + campNumber).child(date.substring(0,2)).push().setValue(activity);
+                        timeStart, timeEnd, name, place, date, description, peoples);
+
+                Ref
+                        .child("Local Activity")
+                        .child(campType)
+                        .child("" + campNumber)
+                        .child(date.substring(3,5))
+                        .child(date.substring(0,2))
+                        .setValue(activity);
                 Toast.makeText(CreateLocalActivity.this, "Добавлено!", Toast.LENGTH_SHORT).show();
                 Intent intentLvl2 = new Intent(v.getContext(), MainActivityLvl2.class);
                 v.getContext().startActivity(intentLvl2);

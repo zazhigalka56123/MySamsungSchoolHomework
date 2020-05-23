@@ -7,8 +7,6 @@ import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -22,17 +20,14 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
-import androidx.navigation.NavType;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Date;
 import java.util.Locale;
 
@@ -190,7 +185,13 @@ public class CreateTLActivity extends AppCompatActivity implements View.OnClickL
                     timeListItemArrayList.add(timeListItemLast);
                 TimeList timeList = new TimeList(timeListItemArrayList.size(), timeListItemLast.date,
                         timeListItemLast.campNumber, timeListItemLast.campType, timeListItemArrayList);
-                Ref.child("" + campNumber).child(date.substring(0,2)).setValue(timeList);
+                Ref
+                        .child("Time List")
+                        .child(campType)
+                        .child("" + campNumber)
+                        .child(date.substring(3,5))
+                        .child(date.substring(0,2))
+                        .setValue(timeList);
                 Toast.makeText(CreateTLActivity.this, "Добавлено!", Toast.LENGTH_SHORT).show();
 
         }
@@ -277,7 +278,7 @@ public class CreateTLActivity extends AppCompatActivity implements View.OnClickL
         spinner_napr.setOnItemSelectedListener(this);
 
         database = FirebaseDatabase.getInstance();
-        Ref = database.getReference("Time List");
+        Ref = database.getReference();
 
         bt_preview_tl = findViewById(R.id.bt_preview_tl);
         bt_preview_tl.setOnClickListener(this);

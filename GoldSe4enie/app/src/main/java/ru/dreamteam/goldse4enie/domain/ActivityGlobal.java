@@ -1,5 +1,7 @@
 package ru.dreamteam.goldse4enie.domain;
 
+import java.util.ArrayList;
+
 public class ActivityGlobal {
     public int maxPeople;
     public String mainPeople;
@@ -8,9 +10,10 @@ public class ActivityGlobal {
     public String name;
     public String place;
     public String description;
+    public final ArrayList<String> peoples;
 
     public ActivityGlobal(int maxPeople, String mainPeople, String timeStart, String timeEnd,
-                          String name, String place, String description) {
+                          String name, String place, String description, ArrayList<String> peoples) {
         this.maxPeople = maxPeople;
         this.mainPeople = mainPeople;
         this.timeStart = timeStart;
@@ -18,6 +21,6 @@ public class ActivityGlobal {
         this.name = name;
         this.place = place;
         this.description = description;
+        this.peoples = peoples;
     }
-    public  ActivityGlobal(){}
 }

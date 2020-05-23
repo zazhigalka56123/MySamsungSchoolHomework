@@ -254,10 +254,14 @@ public class MainActivityLvl1 extends AppCompatActivity implements View.OnClickL
         }
 
         try {
+            Log.d("KEKEKEKKE", currentUser.campType);
+            Log.d("KEKEKEKKE", String.valueOf(currentUser.campNumber));
+            Log.d("KEKEKEKKE", DateNowMonth);
+            Log.d("KEKEKEKKE", DateNowDay);
             myRef
                     .child("Local Activity")
                     .child(currentUser.campType)
-                    .child("" + currentUser.campNumber)
+                    .child(String.valueOf(currentUser.campNumber))
                     .child(DateNowMonth)
                     .child(DateNowDay)
                     .addValueEventListener(localActivityListener);

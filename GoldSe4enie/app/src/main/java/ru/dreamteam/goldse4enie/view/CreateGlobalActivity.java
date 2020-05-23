@@ -20,7 +20,7 @@ import androidx.fragment.app.DialogFragment;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.sql.Ref;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import ru.dreamteam.goldse4enie.DatePickerFragememt;
@@ -54,6 +54,7 @@ public class CreateGlobalActivity extends AppCompatActivity implements View.OnCl
     private String description = "";
     private String mainPeople = "";
     private int maxPeople = 0;
+    private ArrayList<String> peoples = new ArrayList<String>();
 
 
     private FirebaseDatabase database;
@@ -97,7 +98,7 @@ public class CreateGlobalActivity extends AppCompatActivity implements View.OnCl
         tv_error_tl = findViewById(R.id.tv_error_tl);
 
         database = FirebaseDatabase.getInstance();
-        Ref = database.getReference("GA Time List");
+        Ref = database.getReference();
     }
 
     @Override
@@ -243,9 +244,13 @@ public class CreateGlobalActivity extends AppCompatActivity implements View.OnCl
 
             //Загрузка
             case R.id.bt_add_item_tl:
-                ActivityGlobal activity = new ActivityGlobal( maxPeople, mainPeople, timeStart, timeEnd, name, place, description);
-
-                Ref.child(date.substring(0,2)).setValue(activity);
+                ActivityGlobal activity = new ActivityGlobal(maxPeople, mainPeople, timeStart, timeEnd,
+                        name, place, description, peoples);
+                Ref
+                        .child("Local Activity")
+                        .child(date.substring(3,5))
+                        .child(date.substring(0,2))
+                        .setValue(activity);
                 Toast.makeText(CreateGlobalActivity.this, "Добавлено!", Toast.LENGTH_SHORT).show();
                 Intent intentlvl2 = new Intent(v.getContext(), MainActivityLvl2.class);
                 v.getContext().startActivity(intentlvl2);
