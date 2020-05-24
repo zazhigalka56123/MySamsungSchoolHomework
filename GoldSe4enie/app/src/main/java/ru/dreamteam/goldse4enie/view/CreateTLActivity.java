@@ -181,8 +181,6 @@ public class CreateTLActivity extends AppCompatActivity implements View.OnClickL
 
             case R.id.bt_add_tl:
                 TimeListItem timeListItemLast = new TimeListItem(date, campNumber, campType, timeStart, timeEnd, name, place);
-                if (timeListItemLast != timeListItem)
-                    timeListItemArrayList.add(timeListItemLast);
                 TimeList timeList = new TimeList(timeListItemArrayList.size(), timeListItemLast.date,
                         timeListItemLast.campNumber, timeListItemLast.campType, timeListItemArrayList);
                 Ref

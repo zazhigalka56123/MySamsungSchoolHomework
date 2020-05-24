@@ -1,11 +1,13 @@
 package ru.dreamteam.goldse4enie.view;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -20,8 +22,11 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -64,6 +69,8 @@ public class CreateLocalActivity extends AppCompatActivity implements AdapterVie
 
     private FirebaseDatabase database;
     private DatabaseReference Ref;
+    private ValueEventListener ICL;
+    private long IC;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,6 +125,18 @@ public class CreateLocalActivity extends AppCompatActivity implements AdapterVie
 
         database = FirebaseDatabase.getInstance();
         Ref = database.getReference();
+        ICL = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                IC = dataSnapshot.getChildrenCount();
+                Log.d("ICLGET","" + dataSnapshot.getChildrenCount());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w("ICLGET", "loadPost:onCancelled", databaseError.toException());
+            }
+        };
 
     }
 
@@ -131,6 +150,7 @@ public class CreateLocalActivity extends AppCompatActivity implements AdapterVie
 
     }
 
+    @SuppressLint("RestrictedApi")
     @Override
     public void onClick(View v) {
 //        String[] a = CreateTLActivity.updateTime();
@@ -158,6 +178,25 @@ public class CreateLocalActivity extends AppCompatActivity implements AdapterVie
             case R.id.bt_date:
                 DialogFragment datePicker = new DatePickerFragememt();
                 datePicker.show(getSupportFragmentManager(), "date picker");
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                    while(date.length() != 5 || campType.length() <= 3);
+                        Ref
+                                .child("Local Activity")
+                                .child(campType)
+                                .child("" + campNumber)
+                                .child(date.substring(3,5))
+                                .child(date.substring(0,2))
+                                .addValueEventListener(ICL);
+                        Log.d("ICLGET",Ref
+                                .child("Local Activity")
+                                .child(campType)
+                                .child("" + campNumber)
+                                .child(date.substring(3,5))
+                                .child(date.substring(0,2)).getPath().toString());
+                    }
+                }).start();
                 break;
 
             //Установка отряда
@@ -286,6 +325,7 @@ public class CreateLocalActivity extends AppCompatActivity implements AdapterVie
                         .child("" + campNumber)
                         .child(date.substring(3,5))
                         .child(date.substring(0,2))
+                        .child("" + IC)
                         .setValue(activity);
                 Toast.makeText(CreateLocalActivity.this, "Добавлено!", Toast.LENGTH_SHORT).show();
                 Intent intentLvl2 = new Intent(v.getContext(), MainActivityLvl2.class);

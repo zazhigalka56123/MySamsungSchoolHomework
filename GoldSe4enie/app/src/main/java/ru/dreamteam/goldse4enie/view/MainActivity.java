@@ -3,7 +3,6 @@ package ru.dreamteam.goldse4enie.view;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -17,14 +16,12 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.database.core.Path;
 
-import java.io.Serializable;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
+import java.util.HashMap;
+import java.util.Map;
 
 import ru.dreamteam.goldse4enie.R;
 import ru.dreamteam.goldse4enie.domain.TimeList;
@@ -42,7 +39,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private String login;
     private String password;
 
-    User CurrentUser;
+    User currentUser;
+    Map<String,Object>  UL;
+    HashMap<String,User> ULC;
 
     public GetLoginRequest getLoginRequest;
 
@@ -54,23 +53,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onResume() {
 
         super.onResume();
+
     }
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
 
-        User us = new User(1, "1", "1", 1, 15, 1, "Наука");
-        User us2 = new User(1, "2", "1", 2, 15, 1, "Наука");
-
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         myRef = database.getReference("User");
-        myRef.child("1").setValue(us);
-        myRef.child("2").setValue(us2);
 
-        // Obtain the FirebaseAnalytics instance.
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        ULC = new HashMap<>();
+
+        final GenericTypeIndicator<HashMap<String,User>> ULTY = new GenericTypeIndicator<HashMap<String, User>>() {
+        };
+
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                ULC =  dataSnapshot.getValue(ULTY);
+                Log.d("GETUSER","downloaded" );
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                Log.w("li", "Failed to read value.", error.toException());
+            }
+        });
 
         setContentView(R.layout.activity_main);
 
@@ -99,34 +111,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.bt_entrance:
                 login = String.valueOf(login_et.getText());
                 password = String.valueOf(password_et.getText());
-                @SuppressLint("RestrictedApi") Path aa = myRef.child("1").getPath();
-                Log.d("li",aa.toString());
-                myRef.child(login).addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        // This method is called once with the initial value and again
-                        // whenever data at this location is updated.
-                        CurrentUser =  dataSnapshot.getValue(User.class);
-                        //CurrentUser = new User(dataSnapshot.child("id").getValue(Integer.class),"1",
-                        //        "1",2,15,1,"Наука");
-                        Log.d("li","" + dataSnapshot.child("id").getValue(Integer.class));
-
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError error) {
-                        // Failed to read value
-                        Log.w("li", "Failed to read value.", error.toException());
-                    }
-                });
-
+                currentUser = (User) ULC.get(login);
+                Log.d("GETUSER","" + (currentUser == null));
         }
-
-        if(CurrentUser != null) {
-            switch (Enter(CurrentUser, password)) {
+        if(currentUser != null) {
+            switch (Enter(currentUser, password)) {
                 case 1:
                     Intent intentlvl1 = new Intent(v.getContext(), MainActivityLvl1.class);
-                    intentlvl1.putExtra(User.class.getSimpleName(),  CurrentUser);
+                    intentlvl1.putExtra(User.class.getSimpleName(),  currentUser);
                     v.getContext().startActivity(intentlvl1);
                     break;
                 case 2:

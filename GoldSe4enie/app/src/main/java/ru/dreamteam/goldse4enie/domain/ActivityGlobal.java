@@ -10,7 +10,7 @@ public class ActivityGlobal {
     public String name;
     public String place;
     public String description;
-    public final ArrayList<String> peoples;
+    public ArrayList<String> peoples;
 
     public ActivityGlobal(int maxPeople, String mainPeople, String timeStart, String timeEnd,
                           String name, String place, String description, ArrayList<String> peoples) {
@@ -23,4 +23,6 @@ public class ActivityGlobal {
         this.description = description;
         this.peoples = peoples;
     }
+
+    public ActivityGlobal(){}
 }

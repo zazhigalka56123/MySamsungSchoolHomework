@@ -1,11 +1,13 @@
 package ru.dreamteam.goldse4enie.view;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -17,8 +19,11 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -27,6 +32,7 @@ import ru.dreamteam.goldse4enie.DatePickerFragememt;
 import ru.dreamteam.goldse4enie.R;
 import ru.dreamteam.goldse4enie.TimePickerFragment;
 import ru.dreamteam.goldse4enie.domain.ActivityGlobal;
+import ru.dreamteam.goldse4enie.domain.ActivityGlobalList;
 
 public class CreateGlobalActivity extends AppCompatActivity implements View.OnClickListener,
         TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener {
@@ -59,6 +65,8 @@ public class CreateGlobalActivity extends AppCompatActivity implements View.OnCl
 
     private FirebaseDatabase database;
     private DatabaseReference Ref;
+    private ValueEventListener ICL;
+    private long IC;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +107,20 @@ public class CreateGlobalActivity extends AppCompatActivity implements View.OnCl
 
         database = FirebaseDatabase.getInstance();
         Ref = database.getReference();
+
+        ICL = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                IC = dataSnapshot.getChildrenCount();
+                Log.d("ICLGET","" + dataSnapshot.getChildrenCount());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w("ICLGET", "loadPost:onCancelled", databaseError.toException());
+            }
+        };
+
     }
 
     @Override
@@ -125,6 +147,22 @@ public class CreateGlobalActivity extends AppCompatActivity implements View.OnCl
             case R.id.bt_date:
                 DialogFragment datePicker = new DatePickerFragememt();
                 datePicker.show(getSupportFragmentManager(), "date picker");
+                new Thread(new Runnable() {
+                    @SuppressLint("RestrictedApi")
+                    @Override
+                    public void run() {
+                        while(date.length() != 5);
+                        Ref
+                                .child("Global Activity")
+                                .child(date.substring(3,5))
+                                .child(date.substring(0,2))
+                                .addValueEventListener(ICL);
+                        Log.d("ICLGET",Ref
+                                .child("Global Activity")
+                                .child(date.substring(3,5))
+                                .child(date.substring(0,2)).getPath().toString());
+                    }
+                }).start();
                 break;
 
             //Установка имени
@@ -247,9 +285,10 @@ public class CreateGlobalActivity extends AppCompatActivity implements View.OnCl
                 ActivityGlobal activity = new ActivityGlobal(maxPeople, mainPeople, timeStart, timeEnd,
                         name, place, description, peoples);
                 Ref
-                        .child("Local Activity")
+                        .child("Global Activity")
                         .child(date.substring(3,5))
                         .child(date.substring(0,2))
+                        .child("" + IC)
                         .setValue(activity);
                 Toast.makeText(CreateGlobalActivity.this, "Добавлено!", Toast.LENGTH_SHORT).show();
                 Intent intentlvl2 = new Intent(v.getContext(), MainActivityLvl2.class);

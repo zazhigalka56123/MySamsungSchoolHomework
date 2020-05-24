@@ -45,7 +45,7 @@ public class NumbersAdapterTimeList extends RecyclerView.Adapter<NumbersAdapterT
 
 
         Context context = parent.getContext();
-        int layoutIdForListItem = R.layout.item_time_list;
+        int layoutIdForListItem = R.layout.item_preview_t_l;
 
         LayoutInflater inflater = LayoutInflater.from(context);
 

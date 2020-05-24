@@ -3,16 +3,16 @@ package ru.dreamteam.goldse4enie.domain;
 import java.util.ArrayList;
 
 public class ActivityLocal {
-    public final int maxPeople;
-    public final int campNumber;
-    public final String campType;
-    public final String timeStart;
-    public final String timeEnd;
-    public final String name;
-    public final String place;
-    public final String date;
-    public final String description;
-    public final ArrayList<String> peoples;
+    public int maxPeople;
+    public int campNumber;
+    public String campType;
+    public String timeStart;
+    public String timeEnd;
+    public String name;
+    public String place;
+    public String date;
+    public String description;
+    public ArrayList<String> peoples;
 
     public ActivityLocal(int maxPeople, int campNumber, String campType,
                          String timeStart, String timeEnd, String name, String place,
@@ -29,4 +29,6 @@ public class ActivityLocal {
         this.description = description;
         this.peoples = peoples;
     }
+
+    public ActivityLocal(){}
 }

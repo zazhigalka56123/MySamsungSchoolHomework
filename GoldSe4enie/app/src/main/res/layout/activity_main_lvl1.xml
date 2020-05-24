@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/blue"
+    android:background="@color/white"
     tools:context="ru.dreamteam.goldse4enie.view.MainActivityLvl1">
 
     <LinearLayout
@@ -133,7 +133,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="#00FFFFFF"
-                android:src="@drawable/ic_medal" />
+                android:src="@drawable/ic_timeline" />
 
             <TextView
                 android:layout_width="match_parent"
