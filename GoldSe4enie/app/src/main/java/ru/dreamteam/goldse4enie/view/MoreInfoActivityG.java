@@ -21,10 +21,11 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 import ru.dreamteam.goldse4enie.R;
+import ru.dreamteam.goldse4enie.domain.ActivityGlobal;
 import ru.dreamteam.goldse4enie.domain.ActivityLocal;
 import ru.dreamteam.goldse4enie.domain.User;
 
-public class MoreInfoActivity extends AppCompatActivity {
+public class MoreInfoActivityG extends AppCompatActivity {
 
     private ActivityLocal activityLocal;
 
@@ -47,7 +48,7 @@ public class MoreInfoActivity extends AppCompatActivity {
     private TextView tv_description;
     private Button   bt_go;
 
-    private ArrayList<ActivityLocal> List;
+    private ArrayList<ActivityGlobal> List;
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef;
@@ -88,23 +89,21 @@ public class MoreInfoActivity extends AppCompatActivity {
         tv_place      .setText(place);
         tv_description.setText(description);
 
-        final GenericTypeIndicator<ArrayList<ActivityLocal>> ALTY = new GenericTypeIndicator<ArrayList<ActivityLocal>>() {
+        final GenericTypeIndicator<ArrayList<ActivityGlobal>> ALTY = new GenericTypeIndicator<ArrayList<ActivityGlobal>>() {
         };
-        myRef = database.getReference("Local Activity")
-                .child(currentUser.campType)
-                .child(String.valueOf(currentUser.campNumber))
+        myRef = database.getReference("Global Activity")
                 .child(date.substring(3,5))
                 .child(date.substring(0,2));
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 List = dataSnapshot.getValue(ALTY);
-                Log.d("GOWRT","Im on dataChange");
+                Log.d("GOWRTMIA","Im on dataChange");
                 for (int i = 0; i < List.size(); i++) {
                     peoples.remove(i);
                     peoples.add(i,List.get(i).peoples);
                 }
-                Log.d("GOWRT",String.valueOf(peoples));
+                Log.d("GOWRTMIA",String.valueOf(peoples));
             }
 
             @Override
@@ -116,7 +115,7 @@ public class MoreInfoActivity extends AppCompatActivity {
         bt_go.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("GOWRT","" + listIndex);
+                Log.d("GOWRTMIA","" + listIndex);
                 if(go.get(listIndex)) {
                     go.remove(listIndex);
                     go.add(listIndex,false);
@@ -149,20 +148,17 @@ public class MoreInfoActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Места нет", Toast.LENGTH_SHORT).show();
                     }
                 }
-                Log.d("GOWRT",String.valueOf(peoples));
+                Log.d("GOWRTMIA",String.valueOf(peoples));
             }
         });
-
-
-
-        }
+    }
 
     @Override
     public void onBackPressed() {
-         //super.onBackPressed();
+        //super.onBackPressed();
         Intent intentlvl1 = new Intent(this, MainActivityLvl1.class);
         intentlvl1.putExtra(User.class.getSimpleName(),  currentUser);
-        intentlvl1.putExtra("from",  "local");
+        intentlvl1.putExtra("from",  "global");
         this.startActivity(intentlvl1);
     }
 }

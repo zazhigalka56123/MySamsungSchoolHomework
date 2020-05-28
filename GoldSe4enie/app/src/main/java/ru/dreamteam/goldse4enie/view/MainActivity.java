@@ -118,11 +118,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             switch (Enter(currentUser, password)) {
                 case 1:
                     Intent intentlvl1 = new Intent(v.getContext(), MainActivityLvl1.class);
+                    intentlvl1.putExtra("from",  "Main");
                     intentlvl1.putExtra(User.class.getSimpleName(),  currentUser);
                     v.getContext().startActivity(intentlvl1);
                     break;
                 case 2:
                     Intent intentlvl2 = new Intent(v.getContext(), MainActivityLvl2.class);
+                    intentlvl2.putExtra(User.class.getSimpleName(),  currentUser);
                     v.getContext().startActivity(intentlvl2);
                     break;
                 case 3:

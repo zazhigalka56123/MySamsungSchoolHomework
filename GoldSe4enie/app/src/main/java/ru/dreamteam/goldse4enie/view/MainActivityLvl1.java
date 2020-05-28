@@ -1,40 +1,42 @@
 package ru.dreamteam.goldse4enie.view;
 
-import android.annotation.SuppressLint;
-import android.content.Intent;
-import android.content.ServiceConnection;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.ImageButton;
-import android.widget.TextView;
-import android.widget.Toast;
+        import android.annotation.SuppressLint;
+        import android.content.Intent;
+        import android.content.ServiceConnection;
+        import android.os.Bundle;
+        import android.os.Handler;
+        import android.util.Log;
+        import android.view.View;
+        import android.widget.ImageButton;
+        import android.widget.TextView;
+        import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+        import androidx.appcompat.app.AppCompatActivity;
+        import androidx.recyclerview.widget.LinearLayoutManager;
+        import androidx.recyclerview.widget.RecyclerView;
+        import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.GenericTypeIndicator;
-import com.google.firebase.database.ValueEventListener;
+        import com.google.firebase.database.DataSnapshot;
+        import com.google.firebase.database.DatabaseError;
+        import com.google.firebase.database.DatabaseReference;
+        import com.google.firebase.database.FirebaseDatabase;
+        import com.google.firebase.database.GenericTypeIndicator;
+        import com.google.firebase.database.ValueEventListener;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
+        import java.text.DateFormat;
+        import java.text.SimpleDateFormat;
+        import java.util.ArrayList;
+        import java.util.Date;
+        import java.util.Locale;
 
-import ru.dreamteam.goldse4enie.R;
-import ru.dreamteam.goldse4enie.adapters.NumbersAdapterLocalList;
-import ru.dreamteam.goldse4enie.adapters.NumbersAdapterTimeList;
-import ru.dreamteam.goldse4enie.domain.ActivityGlobal;
-import ru.dreamteam.goldse4enie.domain.ActivityLocal;
-import ru.dreamteam.goldse4enie.domain.TimeList;
-import ru.dreamteam.goldse4enie.domain.User;
+        import ru.dreamteam.goldse4enie.R;
+        import ru.dreamteam.goldse4enie.adapters.NumbersAdapterGlobalList;
+        import ru.dreamteam.goldse4enie.adapters.NumbersAdapterLocalList;
+        import ru.dreamteam.goldse4enie.adapters.NumbersAdapterTimeList;
+        import ru.dreamteam.goldse4enie.domain.ActivityGlobal;
+        import ru.dreamteam.goldse4enie.domain.ActivityLocal;
+        import ru.dreamteam.goldse4enie.domain.TimeList;
+        import ru.dreamteam.goldse4enie.domain.User;
 
 public class MainActivityLvl1 extends AppCompatActivity implements View.OnClickListener {
     private ImageButton time_list;
@@ -72,7 +74,7 @@ public class MainActivityLvl1 extends AppCompatActivity implements View.OnClickL
 
     private LinearLayoutManager layoutManager;
 
-    private ServiceConnection SerConn;
+    private Bundle arguments;
 
     private ArrayList<String> timeStart ;
     private ArrayList<String> timeEnd;
@@ -80,6 +82,8 @@ public class MainActivityLvl1 extends AppCompatActivity implements View.OnClickL
     private ArrayList<String> activity;
     private ArrayList<String> description;
     private ArrayList<String> date;
+    private ArrayList<Integer> maxPeople;
+    private  ArrayList<ArrayList<String>> peoples;
 
     private String TimeNowMinute ;
     private String TimeNowHour   ;
@@ -99,7 +103,23 @@ public class MainActivityLvl1 extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onStart() {
         super.onStart();
-
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                switch((String) arguments.getSerializable("from")){
+                    case "local":
+                        local_activity.callOnClick();
+                        break;
+                    case "Main":
+                        time_list.callOnClick();
+                        break;
+                    case "global":
+                        global_activity.callOnClick();
+                        break;
+                }
+            }
+        },500);
     }
 
     @Override
@@ -161,7 +181,7 @@ public class MainActivityLvl1 extends AppCompatActivity implements View.OnClickL
 
         return a;
     }
-    
+
     public void init(){
 
         time_list         = findViewById(R.id.ib_time_list);
@@ -185,7 +205,7 @@ public class MainActivityLvl1 extends AppCompatActivity implements View.OnClickL
         DateNowDay    = a[2];
         DateNowMonth  = a[3];
 
-        Bundle arguments = getIntent().getExtras();
+        arguments = getIntent().getExtras();
         currentUser = (User) arguments.getSerializable(User.class.getSimpleName());
 
         app_name.setText(currentUser.name);
@@ -235,6 +255,7 @@ public class MainActivityLvl1 extends AppCompatActivity implements View.OnClickL
             public void onCancelled(DatabaseError databaseError) {
                 Log.w("GALGET", "loadPost:onCancelled", databaseError.toException());
             }
+
         };
 
         myRef
@@ -279,9 +300,6 @@ public class MainActivityLvl1 extends AppCompatActivity implements View.OnClickL
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         numbersList.setLayoutManager(layoutManager);
-
-
-        
     }
 
     public void setTimeList(){
@@ -329,6 +347,8 @@ public class MainActivityLvl1 extends AppCompatActivity implements View.OnClickL
         place = new ArrayList<>();
         description = new ArrayList<>();
         date = new ArrayList<>();
+        peoples = new ArrayList<>();
+        maxPeople = new ArrayList<>();
 
         Log.d("LOLOLOLOLOL", String.valueOf(currentLocalActivityList.get(0).timeStart));
         Log.d("LOLOLOLOLOL", String.valueOf(currentLocalActivityList.get(0).timeEnd));
@@ -345,10 +365,12 @@ public class MainActivityLvl1 extends AppCompatActivity implements View.OnClickL
             place      .add(currentLocalActivityList.get(i).place);
             description.add(currentLocalActivityList.get(i).description);
             date       .add(currentLocalActivityList.get(i).date);
+            peoples    .add(currentLocalActivityList.get(i).peoples);
+            maxPeople  .add(currentLocalActivityList.get(i).maxPeople);
         }
 
         NumbersAdapterLocalList numbersAdapterKk = new NumbersAdapterLocalList(currentLocalActivityList.size(),
-                timeStart, timeEnd, place, activity, description, date);
+                timeStart, timeEnd, place, activity, description, date,peoples,currentUser,maxPeople,currentLocalActivityList,this);
         numbersList.setAdapter(numbersAdapterKk);
     }
 
@@ -367,15 +389,24 @@ public class MainActivityLvl1 extends AppCompatActivity implements View.OnClickL
         timeEnd = new ArrayList<>();
         activity = new ArrayList<>();
         place = new ArrayList<>();
+        description = new ArrayList<>();
+        date = new ArrayList<>();
+        peoples = new ArrayList<>();
+        maxPeople = new ArrayList<>();
 
         for (int i = 0; i < currentGlobalActivityList.size(); i++) {
-            timeStart.add(currentGlobalActivityList.get(i).timeStart);
-            timeEnd.add(currentGlobalActivityList.get(i).timeEnd);
-            activity.add(currentGlobalActivityList.get(i).name);
-            place.add(currentGlobalActivityList.get(i).place);
+            timeStart  .add(currentGlobalActivityList.get(i).timeStart);
+            timeEnd    .add(currentGlobalActivityList.get(i).timeEnd);
+            activity   .add(currentGlobalActivityList.get(i).name);
+            place      .add(currentGlobalActivityList.get(i).place);
+            description.add(currentGlobalActivityList.get(i).description);
+            date       .add(currentGlobalActivityList.get(i).date);
+            peoples    .add(currentGlobalActivityList.get(i).peoples);
+            maxPeople  .add(currentGlobalActivityList.get(i).maxPeople);
         }
 
-//        NumbersAdapterLocalList numbersAdapterKek = new NumbersAdapterLocalList(timeStart.size(), timeStart, timeEnd, place, activity);
-//        numbersList.setAdapter(numbersAdapterKek);
+        NumbersAdapterGlobalList numbersAdapterKek = new NumbersAdapterGlobalList(timeStart.size()
+                , timeStart, timeEnd, place, activity,description,date,peoples,currentUser,maxPeople,currentGlobalActivityList,this);
+        numbersList.setAdapter(numbersAdapterKek);
     }
 }

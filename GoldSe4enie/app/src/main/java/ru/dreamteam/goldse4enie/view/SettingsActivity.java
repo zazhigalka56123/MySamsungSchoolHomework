@@ -42,7 +42,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
     public void init(){
         Bundle arguments = getIntent().getExtras();
-        currentUser = (User) arguments.getSerializable(User.class.getSimpleName());
+        currentUser = (User ) arguments.getSerializable(User.class.getSimpleName());
 
         bt_home = findViewById(R.id.bt_home);
         bt_home.setOnClickListener(this);

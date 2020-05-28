@@ -32,7 +32,6 @@ import ru.dreamteam.goldse4enie.DatePickerFragememt;
 import ru.dreamteam.goldse4enie.R;
 import ru.dreamteam.goldse4enie.TimePickerFragment;
 import ru.dreamteam.goldse4enie.domain.ActivityGlobal;
-import ru.dreamteam.goldse4enie.domain.ActivityGlobalList;
 
 public class CreateGlobalActivity extends AppCompatActivity implements View.OnClickListener,
         TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener {
@@ -283,7 +282,7 @@ public class CreateGlobalActivity extends AppCompatActivity implements View.OnCl
             //Загрузка
             case R.id.bt_add_item_tl:
                 ActivityGlobal activity = new ActivityGlobal(maxPeople, mainPeople, timeStart, timeEnd,
-                        name, place, description, peoples);
+                        name, place,date, description, peoples);
                 Ref
                         .child("Global Activity")
                         .child(date.substring(3,5))

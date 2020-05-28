@@ -1,5 +1,6 @@
 package ru.dreamteam.goldse4enie.adapters;
 
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -23,12 +24,14 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 import ru.dreamteam.goldse4enie.R;
+import ru.dreamteam.goldse4enie.domain.ActivityGlobal;
 import ru.dreamteam.goldse4enie.domain.ActivityLocal;
 import ru.dreamteam.goldse4enie.domain.User;
 import ru.dreamteam.goldse4enie.view.MainActivityLvl1;
 import ru.dreamteam.goldse4enie.view.MoreInfoActivity;
+import ru.dreamteam.goldse4enie.view.MoreInfoActivityG;
 
-public class NumbersAdapterLocalList extends RecyclerView.Adapter<NumbersAdapterLocalList.NumberViewHolder> {
+public class NumbersAdapterGlobalList extends RecyclerView.Adapter<NumbersAdapterGlobalList.NumberViewHolder> {
 
     private int numberItems;
 
@@ -47,7 +50,7 @@ public class NumbersAdapterLocalList extends RecyclerView.Adapter<NumbersAdapter
     private TextView tv_time_end;
 
     private User currentUser;
-    private ArrayList<ActivityLocal> List;
+    private ArrayList<ActivityGlobal> List;
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef;
@@ -57,13 +60,15 @@ public class NumbersAdapterLocalList extends RecyclerView.Adapter<NumbersAdapter
     private Button bt_more_info;
     private ArrayList<Boolean> go;
     public int index = 0;
+
     Context context;
 
-    public NumbersAdapterLocalList(int numberItems, ArrayList<String> timeStart, ArrayList<String> timeEnd,
+    public NumbersAdapterGlobalList(int numberItems, ArrayList<String> timeStart, ArrayList<String> timeEnd,
                                    ArrayList<String> place, ArrayList<String> activity, ArrayList<String> description,
                                    ArrayList<String> date, ArrayList<ArrayList<String>> peoples, User currentUser,
-                                   ArrayList<Integer> maxPeople, ArrayList<ActivityLocal> List,Context context) {
+                                   ArrayList<Integer> maxPeople, ArrayList<ActivityGlobal> List,Context context) {
         this.peoples = new ArrayList<>();
+
         bt_go_l = new ArrayList<>();
         go = new ArrayList<>();
         this.numberItems = numberItems;
@@ -93,17 +98,16 @@ public class NumbersAdapterLocalList extends RecyclerView.Adapter<NumbersAdapter
 
     @Override
     public NumberViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        final GenericTypeIndicator<ArrayList<ActivityLocal>> ALTY = new GenericTypeIndicator<ArrayList<ActivityLocal>>() {
+        final GenericTypeIndicator<ArrayList<ActivityGlobal>> ALTY = new GenericTypeIndicator<ArrayList<ActivityGlobal>>() {
         };
-        myRef = database.getReference("Local Activity")
-                .child(currentUser.campType)
-                .child(String.valueOf(currentUser.campNumber))
+        myRef = database.getReference("Global Activity")
                 .child(date.get(0).substring(3,5))
                 .child(date.get(0).substring(0,2));
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 List = dataSnapshot.getValue(ALTY);
+                Log.d("GOWRT","" + (List != null));
                 Log.d("GOWRT","Im on dataChange");
                 for (int i = 0; i < List.size(); i++) {
                     peoples.remove(i);
@@ -134,6 +138,8 @@ public class NumbersAdapterLocalList extends RecyclerView.Adapter<NumbersAdapter
         holder.bind(position);
     }
 
+
+
     @Override
     public int getItemCount() {
         return numberItems;
@@ -158,7 +164,7 @@ public class NumbersAdapterLocalList extends RecyclerView.Adapter<NumbersAdapter
             bt_more_info.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intentlvl1 = new Intent(v.getContext(), MoreInfoActivity.class);
+                    Intent intentlvl1 = new Intent(v.getContext(), MoreInfoActivityG.class);
                     intentlvl1.putExtra("date"        ,date       .get(listIndex ));
                     intentlvl1.putExtra("timeStart"   ,timeStart  .get(listIndex));
                     intentlvl1.putExtra("timeEnd"     ,timeEnd    .get(listIndex));
@@ -225,4 +231,5 @@ public class NumbersAdapterLocalList extends RecyclerView.Adapter<NumbersAdapter
 
     }
 }
+
 
