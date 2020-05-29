@@ -150,6 +150,7 @@ public class MoreInfoActivity extends AppCompatActivity {
                     }
                 }
                 Log.d("GOWRT",String.valueOf(peoples));
+                Log.d("GOWRT", "" + String.valueOf(maxPeople));
             }
         });
 

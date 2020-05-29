@@ -3,16 +3,16 @@ package ru.dreamteam.goldse4enie.domain;
 import java.io.Serializable;
 
 public class User implements Serializable {
-    public  int id;
+    public  int login;
     public  String name;
-    public  String password;
+    public  int password;
     public  int lvl;
     public  int age;
     public  int campNumber;
-    public  String campType  ;
+    public  String campType;
 
-    public User(int id, String name, String password,int lvl, int age,int campNumber, String campType) {
-        this.id = id;
+    public User(int login, String name, int password,int lvl, int age,int campNumber, String campType) {
+        this.login = login;
         this.name = name;
         this.password = password;
         this.lvl = lvl;

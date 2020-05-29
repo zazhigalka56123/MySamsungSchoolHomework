@@ -15,6 +15,7 @@ public class MainActivityLvl2 extends AppCompatActivity implements View.OnClickL
     private Button buttonTimeList;
     private Button buttonLocalActivity;
     private Button buttonGlobalActivity;
+    private Button buttonCheckPeople;
     private ImageButton buttonSettingsActivity;
     private User   currentUser;
 
@@ -27,10 +28,12 @@ public class MainActivityLvl2 extends AppCompatActivity implements View.OnClickL
         buttonLocalActivity  = findViewById(R.id.buttonLocalActivity);
         buttonGlobalActivity = findViewById(R.id.buttonGlobalActivity);
         buttonSettingsActivity = findViewById(R.id.bt_settings);
+        buttonCheckPeople     = findViewById(R.id.buttonCheckPeople);
         buttonTimeList.setOnClickListener(this);
         buttonLocalActivity.setOnClickListener(this);
         buttonGlobalActivity.setOnClickListener(this);
         buttonSettingsActivity.setOnClickListener(this);
+        buttonCheckPeople.setOnClickListener(this);
 
         Bundle arguments = getIntent().getExtras();
         currentUser = (User) arguments.getSerializable(User.class.getSimpleName());
@@ -51,6 +54,13 @@ public class MainActivityLvl2 extends AppCompatActivity implements View.OnClickL
                 Intent intentLocalActivity = new Intent(v.getContext(), CreateLocalActivity.class);
                 v.getContext().startActivity(intentLocalActivity);
                 break;
+
+            case R.id.buttonCheckPeople:
+                Intent intentCheckPeople = new Intent(v.getContext(), CheckPeopleActivty.class);
+                intentCheckPeople.putExtra(User.class.getSimpleName(), currentUser);
+                v.getContext().startActivity(intentCheckPeople);
+                break;
+
             case R.id.bt_settings:
                 Intent intentK = new Intent(v.getContext(), SettingsActivity.class);
                 intentK.putExtra(User.class.getSimpleName(), currentUser);

@@ -283,7 +283,6 @@ public class MainActivityLvl1 extends AppCompatActivity implements View.OnClickL
                 .addValueEventListener(globalActivityListener);
 
 
-
         swipeRefresh_lvl1.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ru.dreamteam.goldse4enie">
 
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -9,8 +11,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".view.MoreInfoActivityG"></activity>
-        <activity android:name=".view.MoreInfoActivity"></activity>
+        <activity android:name=".view.ListPeopleActivity"></activity>
+        <activity android:name=".view.CheckPeopleActivty" />
+        <activity android:name=".view.MainActivityLvl3" />
+        <activity android:name=".view.MoreInfoActivityG" />
+        <activity android:name=".view.MoreInfoActivity" />
         <activity android:name=".view.PreviewActivityTL" />
         <activity android:name=".view.CreateGlobalActivity" />
         <activity android:name=".view.CreateLocalActivity" />

@@ -34,7 +34,7 @@
                     android:id="@+id/et_password"
                     android:layout_width="300dp"
                     android:layout_height="50dp"
-                    android:layout_marginTop="40dp"
+                    android:layout_marginTop="34dp"
                     android:hint="Введите пароль"
                     android:inputType="textPassword"
                     android:textColorHint="@color/grey"
@@ -47,7 +47,7 @@
                     android:id="@+id/bt_entrance"
                     android:layout_width="300dp"
                     android:layout_height="50dp"
-                    android:layout_marginTop="40dp"
+                    android:layout_marginTop="34dp"
                     android:background="@drawable/shape_button"
                     android:elevation="20dp"
                     android:text="Войти"
@@ -55,9 +55,22 @@
                     android:textSize="16sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.505"
+                    app:layout_constraintHorizontal_bias="0.495"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/et_password"
+                    app:layout_constraintVertical_bias="0.0"
                     tools:ignore="MissingConstraints" />
+
+                <CheckBox
+                    android:id="@+id/checkBox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="Запомнить меня"
+                    app:layout_constraintEnd_toEndOf="@+id/bt_entrance"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="@+id/bt_entrance"
+                    app:layout_constraintTop_toBottomOf="@+id/bt_entrance" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

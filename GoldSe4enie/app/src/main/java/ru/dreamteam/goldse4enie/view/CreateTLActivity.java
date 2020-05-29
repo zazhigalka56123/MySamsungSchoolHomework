@@ -169,13 +169,13 @@ public class CreateTLActivity extends AppCompatActivity implements View.OnClickL
                 break;
             case R.id.bt_preview_tl:
                 TimeList timeListPreview = new TimeList(timeListItemArrayList.size(), timeListItem.date,
-                    timeListItem.campNumber, timeListItem.campType, timeListItemArrayList);
+                        timeListItem.campNumber, timeListItem.campType, timeListItemArrayList);
                 Intent intentPreview = new Intent(v.getContext(), PreviewActivityTL.class);
-                intentPreview.putExtra("item"         , timeListPreview.item);
-                intentPreview.putExtra("date"         , timeListPreview.date);
-                intentPreview.putExtra("campNumber"   , timeListPreview.campNumber);
-                intentPreview.putExtra("campType"     , timeListPreview.campType);
-                intentPreview.putExtra("timeListArray", timeListPreview.timeListArray);
+                intentPreview.putExtra("item",         timeListPreview.item);
+                intentPreview.putExtra("date",         timeListPreview.date);
+                intentPreview.putExtra("campNumber",   timeListPreview.campNumber);
+                intentPreview.putExtra("campType",     timeListPreview.campType);
+//                intentPreview.putParcelableArrayListExtra("timeListArray", (ArrayList<? extends Parcelable>) timeListPreview.timeListArray);
                 v.getContext().startActivity(intentPreview);
 
 
