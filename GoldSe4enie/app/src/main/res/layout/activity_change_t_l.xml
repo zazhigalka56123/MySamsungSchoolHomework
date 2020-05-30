@@ -5,11 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context=".view.CreateLocalActivity">
+    tools:context=".view.ChangeActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_width="match_parent">
 
         <LinearLayout
             android:id="@+id/linearLayout4"
@@ -41,7 +41,7 @@
                 android:layout_marginTop="10dp"
                 android:layout_weight="100"
                 android:padding="5dp"
-                android:text="Создание мероприятия"
+                android:text="Создание расписания"
                 android:textAlignment="center"
                 android:textColor="#399CD1"
                 android:textSize="20dp"
@@ -71,10 +71,10 @@
 
 
         <LinearLayout
-            android:id="@+id/linearLayout15"
+            android:id="@+id/linearLayout10"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="40dp"
             android:background="@color/white"
             android:elevation="5dp"
             android:paddingLeft="10dp"
@@ -83,140 +83,6 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout4">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingTop="10dp"
-                android:text="Выберите дату"
-                android:textColor="#000" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-
-            <Button
-                android:id="@+id/bt_date"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/nothing"
-                android:text="01.01"
-                android:textColor="@color/grey" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/linearLayout16"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="20dp"
-            android:background="@color/white"
-            android:elevation="5dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout15">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingTop="10dp"
-                android:text="Отряд"
-                android:textColor="#000" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-
-            <Button
-                android:id="@+id/bt_set_otryad"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/nothing"
-                android:textColor="@color/grey"
-                android:text="0"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/linearLayout17"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="@color/white"
-            android:elevation="5dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout16">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingTop="10dp"
-                android:text="Направление"
-                android:textColor="#000" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-
-            <Spinner
-                android:id="@+id/spinner_napr"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAlignment="viewEnd" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/linearLayout21"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="20dp"
-            android:background="@color/white"
-            android:elevation="5dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout17">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingTop="10dp"
-                android:text="Участников"
-                android:textColor="#000" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-
-            <Button
-                android:id="@+id/bt_max_people"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/nothing"
-                android:text="0"
-                android:textColor="@color/grey" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/linearLayout10"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="20dp"
-            android:background="@color/white"
-            android:elevation="5dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout21">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -342,40 +208,6 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/linearLayout20"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:elevation="5dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout19">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingTop="10dp"
-                android:text="Описание   "
-                android:textColor="#000" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
-
-            <Button
-                android:id="@+id/bt_set_description"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/nothing"
-                android:text="..."
-                android:textColor="@color/grey" />
-
-        </LinearLayout>
-
 
         <TextView
             android:id="@+id/tv_error_tl"
@@ -388,7 +220,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout20" />
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout19" />
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -408,11 +241,11 @@
                 android:layout_weight="1" />
 
             <Button
-                android:id="@+id/bt_add_tl"
+                android:id="@+id/bt_accept"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
                 android:background="@drawable/shape_button"
-                android:text="Добавить"
+                android:text="Применить  "
                 android:textColor="@color/blue"
                 android:textSize="12sp" />
 

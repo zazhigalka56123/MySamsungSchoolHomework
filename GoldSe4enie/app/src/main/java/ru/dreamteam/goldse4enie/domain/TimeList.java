@@ -1,8 +1,9 @@
 package ru.dreamteam.goldse4enie.domain;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class TimeList {
+public class TimeList implements Serializable {
     public int item;
     public String date;
     public int campNumber;

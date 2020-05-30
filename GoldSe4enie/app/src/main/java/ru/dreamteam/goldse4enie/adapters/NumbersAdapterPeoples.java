@@ -48,7 +48,7 @@ public class NumbersAdapterPeoples extends RecyclerView.Adapter<NumbersAdapterPe
 
     @Override
     public int getItemCount() {
-        return numberItems;
+        return peoples.size();
     }
     class NumberViewHolder extends RecyclerView.ViewHolder {
         public NumberViewHolder(@NonNull View itemView) {
@@ -57,8 +57,8 @@ public class NumbersAdapterPeoples extends RecyclerView.Adapter<NumbersAdapterPe
             tv_people = itemView.findViewById(R.id.tv_people);
         }
         void bind(int listIndex) {
-            tv_number.setText(listIndex + 1);
-            tv_people.setText(peoples.get(listIndex));
+            tv_number.setText("" + (listIndex + 1));
+            tv_people.setText("" + peoples.get(listIndex));
         }
     }
 }

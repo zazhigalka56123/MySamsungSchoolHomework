@@ -28,6 +28,7 @@ import ru.dreamteam.goldse4enie.domain.ActivityLocal;
 import ru.dreamteam.goldse4enie.domain.User;
 import ru.dreamteam.goldse4enie.view.ListPeopleActivity;
 import ru.dreamteam.goldse4enie.view.MoreInfoActivity;
+import ru.dreamteam.goldse4enie.view.MoreInfoActivityP;
 
 public class NumbersAdapterCheckPeopleLocal extends RecyclerView.Adapter<NumbersAdapterCheckPeopleLocal.NumberViewHolder> {
 
@@ -49,12 +50,11 @@ public class NumbersAdapterCheckPeopleLocal extends RecyclerView.Adapter<Numbers
     private TextView tv_time_end;
 
     private User currentUser;
-    private ArrayList<ActivityLocal> List;
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference myRef;
 
-    private Button bt_go;
+    private Button bt_people;
     private ArrayList<Button> bt_go_l;
     private Button bt_more_info;
     private ArrayList<Boolean> go;
@@ -64,7 +64,7 @@ public class NumbersAdapterCheckPeopleLocal extends RecyclerView.Adapter<Numbers
     public NumbersAdapterCheckPeopleLocal(int numberItems, ArrayList<String> timeStart, ArrayList<String> timeEnd,
                                    ArrayList<String> place, ArrayList<String> activity, ArrayList<String> description,
                                    ArrayList<String> date, ArrayList<ArrayList<String>> peoples, User currentUser,
-                                   ArrayList<Integer> maxPeople, ArrayList<ActivityLocal> List,Context context) {
+                                   ArrayList<Integer> maxPeople,Context context) {
         this.peoples = new ArrayList<>();
         bt_go_l = new ArrayList<>();
         go = new ArrayList<>();
@@ -78,47 +78,14 @@ public class NumbersAdapterCheckPeopleLocal extends RecyclerView.Adapter<Numbers
         this.peoples = peoples;
         this.currentUser = currentUser;
         this.maxPeople = maxPeople;
-        this.List = List;
+
         this.context = context;
 
         Log.d("GOWRT",String.valueOf(peoples));
-
-        for (int i = 0; i < getItemCount(); i++) {
-            if(peoples.get(i) != null){
-                if(peoples.get(i).contains(currentUser.name))go.add(true);
-                else go.add(false);
-            }else{
-                go.add(false);
-            }
-        }
     }
 
     @Override
-    public NumbersAdapterCheckPeopleLocal.NumberViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        final GenericTypeIndicator<ArrayList<ActivityLocal>> ALTY = new GenericTypeIndicator<ArrayList<ActivityLocal>>() {
-        };
-        myRef = database.getReference("Local Activity")
-                .child(currentUser.campType)
-                .child(String.valueOf(currentUser.campNumber))
-                .child(date.get(0).substring(3,5))
-                .child(date.get(0).substring(0,2));
-        myRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                List = dataSnapshot.getValue(ALTY);
-                Log.d("GOWRT","Im on dataChange");
-                for (int i = 0; i < List.size(); i++) {
-                    peoples.remove(i);
-                    peoples.add(i,List.get(i).peoples);
-                }
-                Log.d("GOWRT",String.valueOf(peoples));
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+    public NumberViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         Context context = parent.getContext();
         int layoutIdForListItem = R.layout.item_check_people;
@@ -127,12 +94,12 @@ public class NumbersAdapterCheckPeopleLocal extends RecyclerView.Adapter<Numbers
 
         View view = inflater.inflate(layoutIdForListItem, parent, false);
 
-        NumbersAdapterCheckPeopleLocal.NumberViewHolder viewHolder = new NumbersAdapterCheckPeopleLocal.NumberViewHolder(view);
+        NumberViewHolder viewHolder = new NumbersAdapterCheckPeopleLocal.NumberViewHolder(view);
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull NumbersAdapterCheckPeopleLocal.NumberViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull NumberViewHolder holder, int position) {
         holder.bind(position);
     }
 
@@ -148,9 +115,7 @@ public class NumbersAdapterCheckPeopleLocal extends RecyclerView.Adapter<Numbers
             tv_time_start = itemView.findViewById(R.id.tv_time_start);
             tv_time_end   = itemView.findViewById(R.id.tv_time_end);
             bt_more_info  = itemView.findViewById(R.id.bt_more_info);
-            bt_go         = itemView.findViewById(R.id.bt_go);
-            bt_go_l.add(bt_go);
-
+            bt_people     = itemView.findViewById(R.id.bt_people);
         }
         void bind(final int listIndex) {
             Log.d("LOLOLOLOLOL", String.valueOf(timeStart));
@@ -160,7 +125,7 @@ public class NumbersAdapterCheckPeopleLocal extends RecyclerView.Adapter<Numbers
             bt_more_info.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intentlvl1 = new Intent(v.getContext(), MoreInfoActivity.class);
+                    Intent intentlvl1 = new Intent(v.getContext(), MoreInfoActivityP.class);
                     intentlvl1.putExtra("date"        ,date       .get(listIndex ));
                     intentlvl1.putExtra("timeStart"   ,timeStart  .get(listIndex));
                     intentlvl1.putExtra("timeEnd"     ,timeEnd    .get(listIndex));
@@ -175,11 +140,11 @@ public class NumbersAdapterCheckPeopleLocal extends RecyclerView.Adapter<Numbers
                     v.getContext().startActivity(intentlvl1);
                 }
             });
-            bt_go.setOnClickListener(new View.OnClickListener() {
+            bt_people.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(v.getContext(), ListPeopleActivity.class);
-                    intent.putExtra("peoples",peoples);
+                    intent.putExtra("peoples",peoples.get(listIndex));
                     v.getContext().startActivity(intent);
                 }
             });
@@ -189,8 +154,6 @@ public class NumbersAdapterCheckPeopleLocal extends RecyclerView.Adapter<Numbers
             tv_place     .setText(place.get(listIndex));
             tv_activity  .setText(activity.get(listIndex));
             index = listIndex;
-            if(go.get(listIndex) == true) bt_go.setText("Не Пойду");
-            else bt_go.setText("Пойду");
         }
 
 

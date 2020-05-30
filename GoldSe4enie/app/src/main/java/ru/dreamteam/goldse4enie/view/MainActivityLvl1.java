@@ -68,7 +68,7 @@ public class MainActivityLvl1 extends AppCompatActivity implements View.OnClickL
     private boolean receivedDataLocalActivity  = false;
     private boolean receivedDataGlobalActivity = false;
 
-    private boolean setTimeListFlag       = false;
+    private boolean setTimeListFlag       = true;
     private boolean setLocalActivityFlag  = false;
     private boolean setGlobalActivityFlag = false;
 
@@ -281,6 +281,7 @@ public class MainActivityLvl1 extends AppCompatActivity implements View.OnClickL
                 .child(DateNowMonth)
                 .child(DateNowDay)
                 .addValueEventListener(globalActivityListener);
+
 
 
         swipeRefresh_lvl1.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {

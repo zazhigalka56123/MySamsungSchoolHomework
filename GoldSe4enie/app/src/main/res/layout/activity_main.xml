@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context="ru.dreamteam.goldse4enie.view.MainActivity">
+    tools:context="ru.dreamteam.goldse4eni                      e.view.MainActivity">
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_height="match_parent"
             android:layout_width="match_parent">

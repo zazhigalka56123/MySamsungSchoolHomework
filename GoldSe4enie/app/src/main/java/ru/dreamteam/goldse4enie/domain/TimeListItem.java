@@ -1,6 +1,8 @@
 package ru.dreamteam.goldse4enie.domain;
 
-public class TimeListItem {
+import java.io.Serializable;
+
+public class TimeListItem implements Serializable {
     public  String date;
     public  int campNumber;
     public  String campType;

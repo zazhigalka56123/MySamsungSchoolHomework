@@ -5,9 +5,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -31,7 +36,7 @@ import ru.dreamteam.goldse4enie.domain.ActivityLocal;
 import ru.dreamteam.goldse4enie.domain.TimeList;
 import ru.dreamteam.goldse4enie.domain.User;
 
-public class CheckPeopleActivty extends AppCompatActivity {
+public class CheckPeopleActivty extends AppCompatActivity implements View.OnClickListener {
 
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private DatabaseReference myRef = database.getReference();
@@ -65,6 +70,12 @@ public class CheckPeopleActivty extends AppCompatActivity {
     private ArrayList<Integer> maxPeople;
     private  ArrayList<ArrayList<String>> peoples;
 
+    private ImageButton time_list;
+    private ImageButton local_activity;
+    private ImageButton global_activity;
+    private ImageButton settings;
+    private TextView app_name;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,8 +86,17 @@ public class CheckPeopleActivty extends AppCompatActivity {
 
 
     public void init(){
+        local_activity    = findViewById(R.id.ib_local_activity);
+        global_activity   = findViewById(R.id.ib_global_activity);
+        settings          = findViewById(R.id.bt_settings);
+        app_name          = findViewById(R.id.textView2);
         Bundle arguments = getIntent().getExtras();
         currentUser = (User) arguments.getSerializable(User.class.getSimpleName());
+
+        local_activity   .setOnClickListener(this);
+        global_activity  .setOnClickListener(this);
+        settings         .setOnClickListener(this);
+
 
         Log.d("KODRED", currentUser.campType);
         Log.d("KODRED", String.valueOf(currentUser.campNumber));
@@ -196,7 +216,7 @@ public class CheckPeopleActivty extends AppCompatActivity {
             }
 
             NumbersAdapterCheckPeopleLocal numbersAdapterKk = new NumbersAdapterCheckPeopleLocal(currentLocalActivityList.size(),
-                    timeStart, timeEnd, place, activity, description, date,peoples,currentUser,maxPeople,currentLocalActivityList,this);
+                    timeStart, timeEnd, place, activity, description, date,peoples,currentUser,maxPeople,this);
             numbersList.setAdapter(numbersAdapterKk);
         }else{
             Log.d("KODRED", "fuck");
@@ -233,8 +253,8 @@ public class CheckPeopleActivty extends AppCompatActivity {
             maxPeople  .add(currentGlobalActivityList.get(i).maxPeople);
         }
 
-        NumbersAdapterGlobalList numbersAdapterKek = new NumbersAdapterGlobalList(timeStart.size()
-                , timeStart, timeEnd, place, activity,description,date,peoples,currentUser,maxPeople,currentGlobalActivityList,this);
+        NumbersAdapterCheckPeopleLocal numbersAdapterKek = new NumbersAdapterCheckPeopleLocal(timeStart.size()
+                , timeStart, timeEnd, place, activity,description,date,peoples,currentUser,maxPeople,this);
         numbersList.setAdapter(numbersAdapterKek);
     }
 
@@ -254,5 +274,34 @@ public class CheckPeopleActivty extends AppCompatActivity {
         a[3] = dateFormatMonth.format(currentDate);
 
         return a;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.ib_global_activity:
+                if (receivedDataGlobalActivity == true) {
+                    setGlobalActivity();
+                }else {
+                    Toast.makeText(this, "Отсутствуют мероприятия( Что то здесь не так...", Toast.LENGTH_SHORT).show();
+
+                }
+                break;
+
+            case R.id.ib_local_activity:
+                if (receivedDataLocalActivity == true) {
+                    setLocalActivity();
+                }else {
+                    Toast.makeText(this, "Отсутствуют мероприятия( Организуйте их сами и сообщите вожатому!", Toast.LENGTH_SHORT).show();
+                }
+                break;
+
+            case R.id.bt_settings:
+                Intent intentK = new Intent(v.getContext(), SettingsActivity.class);
+                intentK.putExtra(User.class.getSimpleName(), currentUser);
+                v.getContext().startActivity(intentK);
+                break;
+
+        }
     }
 }

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -18,6 +19,7 @@ public class MainActivityLvl2 extends AppCompatActivity implements View.OnClickL
     private Button buttonCheckPeople;
     private ImageButton buttonSettingsActivity;
     private User   currentUser;
+    private TextView app_name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +31,7 @@ public class MainActivityLvl2 extends AppCompatActivity implements View.OnClickL
         buttonGlobalActivity = findViewById(R.id.buttonGlobalActivity);
         buttonSettingsActivity = findViewById(R.id.bt_settings);
         buttonCheckPeople     = findViewById(R.id.buttonCheckPeople);
+        app_name = findViewById(R.id.textView2);
         buttonTimeList.setOnClickListener(this);
         buttonLocalActivity.setOnClickListener(this);
         buttonGlobalActivity.setOnClickListener(this);
@@ -37,6 +40,9 @@ public class MainActivityLvl2 extends AppCompatActivity implements View.OnClickL
 
         Bundle arguments = getIntent().getExtras();
         currentUser = (User) arguments.getSerializable(User.class.getSimpleName());
+
+        app_name.setText(currentUser.name);
+
     }
 
     @Override
@@ -44,6 +50,7 @@ public class MainActivityLvl2 extends AppCompatActivity implements View.OnClickL
         switch (v.getId()){
             case R.id.buttonTimeList:
                 Intent intentTimeList = new Intent(v.getContext(), CreateTLActivity.class);
+                intentTimeList.putExtra("from","lvl2");
                 v.getContext().startActivity(intentTimeList);
                 break;
             case R.id.buttonGlobalActivity:

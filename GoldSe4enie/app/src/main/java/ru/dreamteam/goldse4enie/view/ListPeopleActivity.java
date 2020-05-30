@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.view.View;
 
 import java.util.ArrayList;
 
@@ -12,7 +13,7 @@ import ru.dreamteam.goldse4enie.R;
 import ru.dreamteam.goldse4enie.adapters.NumbersAdapterPeoples;
 import ru.dreamteam.goldse4enie.adapters.NumbersAdapterTimeList;
 
-public class ListPeopleActivity extends AppCompatActivity {
+public class ListPeopleActivity extends AppCompatActivity implements View.OnClickListener {
 
     private ArrayList<String> peoples;
 
@@ -35,7 +36,20 @@ public class ListPeopleActivity extends AppCompatActivity {
 
         numbersList.setHasFixedSize(true);
 
-        NumbersAdapterPeoples numbersAdapter = new NumbersAdapterPeoples(peoples.size(), peoples);
-        numbersList.setAdapter(numbersAdapter);
+        if(peoples != null) {
+            NumbersAdapterPeoples numbersAdapter = new NumbersAdapterPeoples(peoples.size(), peoples);
+            numbersList.setAdapter(numbersAdapter);
+        }
+        else {
+            peoples = new ArrayList<>();
+            peoples.add("отсутствуют посетители");
+            NumbersAdapterPeoples numbersAdapter = new NumbersAdapterPeoples(peoples.size(), peoples);
+            numbersList.setAdapter(numbersAdapter);
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+
     }
 }
